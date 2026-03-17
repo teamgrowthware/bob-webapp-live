@@ -1,0 +1,232 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector")]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  phone     String   @unique
+  name      String?
+  class     String?
+  school    String?
+  city      String?
+  state     String?
+  dob       DateTime?
+  xp        Int      @default(0)
+  weeklyXp  Int      @default(0)
+  coins     Int      @default(0)
+  level     Int      @default(1)
+  role      Role     @default(STUDENT)
+  isPremium Boolean  @default(false)
+  isFeatured Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  streak    Int      @default(0)
+  lastActive DateTime?
+
+  // Parent-Child linkage
+  parentId  String?
+  parent    User?      @relation("ParentToChildren", fields: [parentId], references: [id])
+  children  User[]     @relation("ParentToChildren")
+
+  attempts      Attempt[]
+  redemptions   RewardRedemption[]
+  doubts        Doubt[]
+  tasks         Task[]
+  notifications Notification[]
+
+  // Classroom relations
+  taughtClasses Classroom[] @relation("TeacherClasses")
+  enrollments   Enrollment[]
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  subject     String
+  description String
+  timeBlock   String?  // e.g., "10:00 AM - 11:00 AM"
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+  PARENT
+}
+
+model Textbook {
+  id        String    @id @default(uuid())
+  name      String
+  class     String
+  subject   String
+  chapters  Chapter[]
+  createdAt DateTime  @default(now())
+}
+
+model Chapter {
+  id         String           @id @default(uuid())
+  textbookId String
+  textbook   Textbook         @relation(fields: [textbookId], references: [id])
+  title      String
+  chunks     EmbeddingChunk[]
+  quizzes    Quiz[]
+}
+
+model EmbeddingChunk {
+  id        String                 @id @default(uuid())
+  chapterId String
+  chapter   Chapter                @relation(fields: [chapterId], references: [id])
+  content   String                 // Semantic chunk (500-800 tokens)
+  embedding Unsupported("vector")? // pgvector type
+}
+
+model Quiz {
+  id        String     @id @default(uuid())
+  title     String
+  date      DateTime   @default(now())
+  subject   String?
+  status    QuizStatus @default(DRAFT)
+  isPremium Boolean    @default(false)
+  chapterId String?
+  chapter   Chapter?   @relation(fields: [chapterId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  questions QuizQuestion[]
+  attempts  Attempt[]
+  assignments Assignment[]
+}
+
+model QuizQuestion {
+  id          String   @id @default(uuid())
+  quizId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  text        String
+  options     String   // JSON string array
+  correctIdx  Int
+  explanation String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum QuizStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Attempt {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  quizId    String
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  score     Int
+  accuracy  Float
+  timeSpent Int      // in seconds
+  createdAt DateTime @default(now())
+}
+
+model Reward {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  coinPrice   Int
+  stock       Int      @default(0)
+  validity    String?
+  type        String   // e.g., "VOUCHER", "PHYSICAL", "DISCOUNT"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  redemptions RewardRedemption[]
+}
+
+model RewardRedemption {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  rewardId    String
+  reward      Reward   @relation(fields: [rewardId], references: [id])
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  code        String?  // Optional voucher code filled by admin
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Doubt {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  question          String
+  aiResponse        String
+  status            String   @default("UNVERIFIED") // UNVERIFIED, VERIFIED, FLAGGED
+  teacherCorrection String?
+  topic             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      String   // ACHIEVEMENT, PERFORMANCE, SYSTEM
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Classroom {
+  id        String   @id @default(uuid())
+  name      String
+  code      String   @unique // 6-digit invitation code
+  teacherId String
+  teacher   User     @relation("TeacherClasses", fields: [teacherId], references: [id])
+  students  Enrollment[]
+  assignments Assignment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enrollment {
+  id          String    @id @default(uuid())
+  studentId   String
+  student     User      @relation(fields: [studentId], references: [id])
+  classId     String
+  classroom   Classroom @relation(fields: [classId], references: [id])
+  enrolledAt  DateTime  @default(now())
+
+  @@unique([studentId, classId])
+}
+
+model Assignment {
+  id          String    @id @default(uuid())
+  classId     String
+  classroom   Classroom @relation(fields: [classId], references: [id])
+  quizId      String
+  quiz        Quiz      @relation(fields: [quizId], references: [id])
+  dueDate     DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+model AdBanner {
+  id        String   @id @default(uuid())
+  title     String
+  imageUrl  String
+  linkUrl   String
+  location  String   // e.g., "DASHBOARD", "QUIZ_RESULT"
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
