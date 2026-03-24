@@ -15,19 +15,34 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid OTP" }, { status: 400 });
     }
 
-    // Check if user exists
-    let user = await prisma.user.findUnique({
-      where: { phone }
-    });
-
+    // Check if user exists (with fail-safe)
+    let user: any = null;
     let isNewUser = false;
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          phone,
-        }
+    let dbFailed = false;
+
+    try {
+      user = await prisma.user.findUnique({
+        where: { phone }
       });
-      isNewUser = true;
+
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            phone,
+          }
+        });
+        isNewUser = true;
+      }
+    } catch (dbError) {
+      console.error("Database connection failed, using fail-safe mock:", dbError);
+      dbFailed = true;
+      // Fail-safe mock user
+      user = {
+        id: `mock-${phone}`,
+        phone,
+        role: "STUDENT",
+        name: "Trial User",
+      };
     }
 
     // Create session cookie
@@ -37,7 +52,8 @@ export async function POST(request: Request) {
       success: true,
       token,
       isNewUser,
-      needsOnboarding: !user.name || !user.class || !user.school
+      isDemoMode: dbFailed,
+      needsOnboarding: dbFailed ? false : (!user.name || !user.class || !user.school)
     });
   } catch (error: any) {
     console.error("Auth Error:", error);
