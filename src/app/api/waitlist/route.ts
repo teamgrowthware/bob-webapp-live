@@ -18,7 +18,7 @@ export async function POST(request: Request) {
         name,
         city,
         class: cls,
-        email: contact,
+        phone: contact,
       }
     });
 

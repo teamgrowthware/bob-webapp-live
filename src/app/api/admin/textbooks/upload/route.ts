@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
-import pdf from "pdf-parse";
+import { PDFParse } from "pdf-parse";
 import { chunkText } from "@/lib/chunking";
 import { generateEmbeddings } from "@/lib/ai";
 import crypto from "crypto";
@@ -32,7 +32,8 @@ export async function POST(req: Request) {
     await writeFile(filePath, buffer);
 
     // 2. Extract Text
-    const data = await pdf(buffer);
+    const parser = new PDFParse({ data: buffer });
+    const data = await parser.getText();
     const rawText = data.text;
 
     // 3. Simple Chapter Detection (MVP: One big chapter if not found)

@@ -42,7 +42,7 @@ export async function POST(req: Request) {
           create: aiQuestions.map((q) => ({
             text: q.text,
             options: JSON.stringify(q.options),
-            correctOption: q.correctOption,
+            correctIdx: q.correctIdx,
             timeLimit: q.timeLimit || 30, // Default 30s
           })),
         },

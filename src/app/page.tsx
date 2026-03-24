@@ -1,235 +1,211 @@
 "use client";
 
-import { useTransition, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Brain, Flame, Trophy, Users, Zap, School, ArrowRight, CheckCircle2, MessageSquare, ShieldCheck, Gamepad2, Stars, Swords } from "lucide-react";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Brain, Trophy, Zap, Shield, ChevronRight, BarChart3, Users, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { submitWaitlist } from "./actions";
+import { Button } from "@/components/ui/button";
 
 export default function LandingPage() {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleWaitlistSubmit = async (formData: FormData) => {
-    setError(null);
-    startTransition(async () => {
-      const result = await submitWaitlist(formData);
-      if (result.success) {
-        setSubmitted(true);
-      } else {
-        setError(result.error || "Something went wrong. Try again.");
-      }
+  const handleStart = () => {
+    startTransition(() => {
+      router.push("/login");
     });
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-violet-500/30 overflow-x-hidden">
-      {/* Decorative Background Elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-600/10 rounded-full blur-[120px]" />
+    <div className="min-h-screen bg-[#111116] text-white selection:bg-violet-500/30 overflow-x-hidden font-sans">
+      {/* Dynamic Background Blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[150px] rounded-full animate-pulse-glow" />
+        <div className="absolute bottom-[0%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-600/10 blur-[150px] rounded-full animate-float" />
       </div>
 
-      {/* Navbar */}
-      <nav className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-tr from-violet-600 to-fuchsia-500 p-2 rounded-xl shadow-lg shadow-violet-500/20">
-              <Brain className="w-6 h-6 text-white" />
-            </div>
-            <span className="font-black text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">BOB</span>
+      {/* Navigation */}
+      <nav className="border-b border-white/5 bg-[#16161e]/80 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3 group">
+             <span className="font-black italic text-xl lg:text-3xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
+                BATTLE OF BRAINS (BOB)
+             </span>
           </div>
-          <div className="flex items-center gap-6">
-            <Link href="#how-it-works" className="hidden md:block text-zinc-400 hover:text-white font-medium transition-colors">How it Works</Link>
-            <Link href="#waitlist">
-              <Button className="bg-white hover:bg-zinc-200 text-black font-black px-6 rounded-full transition-all active:scale-95">
-                Join Arena
-              </Button>
-            </Link>
+          
+          <div className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-widest text-zinc-500">
+             <Link href="#features" className="hover:text-white transition-colors">Combat Intel</Link>
+             <Link href="#sectors" className="hover:text-white transition-colors">Arena Sectors</Link>
+             <Link href="/faq" className="hover:text-white transition-colors">Protocol</Link>
+             <Link href="/contact" className="hover:text-white transition-colors">Signal HQ</Link>
           </div>
+
+          <Link href="/login">
+            <Button className="bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-white font-black px-8 rounded-full h-11 transition-all active:scale-95 text-xs uppercase tracking-widest italic">
+              Access Terminal
+            </Button>
+          </Link>
         </div>
       </nav>
 
-      <main className="relative">
-        {/* HERO SECTION */}
-        <section className="relative pt-24 pb-32 px-4">
-          <div className="max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-sm font-bold text-violet-400 mb-8 animate-bounce-slow">
-              <Stars className="w-4 h-4" />
-              <span>Launching in Select Schools Soon</span>
-            </div>
-            
-            <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-8 leading-[0.9] text-white">
-              STOP STUDYING.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400">
-                START BATTLING.
-              </span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-zinc-400 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
-              Battle of Brains (BOB) turns your boring subjects into heart-pounding 1v1 battles. Climb the national leaderboard and win rewards that actually matter.
-            </p>
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-24 px-6">
+        <div className="max-w-7xl mx-auto text-center space-y-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-violet-600/10 border border-violet-500/20 text-xs font-black text-violet-400 uppercase tracking-widest animate-pulse"
+          >
+            <Sparkles size={14} /> Global Beta Protocol Active
+          </motion.div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link href="#waitlist" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto bg-violet-600 hover:bg-violet-500 text-white font-black h-16 px-10 text-xl rounded-2xl shadow-2xl shadow-violet-600/40 transition-all active:scale-95 group">
-                  Claim Your Handle <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <div className="flex items-center gap-[-10px]">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-zinc-950 bg-zinc-800 flex items-center justify-center -ml-3 first:ml-0 overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-br from-zinc-700 to-zinc-900" />
-                  </div>
-                ))}
-                <span className="ml-4 text-zinc-500 font-bold text-sm tracking-wide">Join 400+ Smart Minds</span>
-              </div>
-            </div>
-          </div>
-        </section>
+          <motion.h1 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+            className="text-6xl md:text-8xl lg:text-[10rem] font-black italic uppercase tracking-tighter leading-[0.85] text-white"
+          >
+            Battle of<br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 drop-shadow-[0_0_40px_rgba(139,92,246,0.3)]">Brains</span>
+          </motion.h1>
 
-        {/* HOW IT WORKS - MVP SCALE */}
-        <section id="how-it-works" className="py-32 bg-zinc-900/40 border-y border-zinc-900 px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
-              <div className="max-w-xl">
-                <h2 className="text-4xl md:text-5xl font-black mb-6">THE STUDENT<br /><span className="text-violet-500">LIFECYCLE</span></h2>
-                <p className="text-zinc-400 text-lg font-medium">We replaced boring MCQ tests with aggressive gamification. Here is how you dominate.</p>
-              </div>
-              <div className="bg-zinc-800/50 p-4 rounded-2xl border border-zinc-700 flex items-center gap-4">
-                <Zap className="text-amber-400" />
-                <span className="text-white font-bold">New Battles Every 24h</span>
-              </div>
-            </div>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="max-w-2xl mx-auto text-zinc-500 text-lg md:text-xl font-bold leading-relaxed tracking-tight uppercase"
+          >
+            The elite gamified arena where warriors dominate subjects, crush missions, and secure their place on the global leaderboard.
+          </motion.p>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                { step: "01", icon: <Gamepad2 className="text-violet-400" />, title: "Join the Arena", desc: "Select your school and class. Get your daily battle packet based on your actual syllabus." },
-                { step: "02", icon: <Swords className="text-fuchsia-400" />, title: "Battle 1v1", desc: "Clash with students across India in real-time. Speed + Accuracy = Massive XP." },
-                { step: "03", icon: <Trophy className="text-cyan-400" />, title: "Redeem Loot", desc: "Bored of digital badges? Win real tech, vouchers, and school bragging rights." },
-              ].map((item, i) => (
-                <div key={i} className="relative p-10 rounded-3xl bg-zinc-950 border border-zinc-900 group hover:border-violet-500/50 transition-all duration-500">
-                  <span className="absolute top-6 right-10 text-6xl font-black text-zinc-900 group-hover:text-violet-500/10 transition-colors uppercase">{item.step}</span>
-                  <div className="mb-8 p-4 rounded-2xl bg-zinc-900 border border-zinc-800 inline-block group-hover:scale-110 transition-transform">
-                    {item.icon}
-                  </div>
-                  <h3 className="text-2xl font-black mb-4 text-white uppercase">{item.title}</h3>
-                  <p className="text-zinc-500 leading-relaxed font-medium">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* WAITLIST SECTION */}
-        <section id="waitlist" className="py-32 px-4">
-          <div className="max-w-5xl mx-auto">
-             <div className="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                   <h2 className="text-5xl font-black mb-8 leading-tight">LIMITED ACCESS.<br /><span className="text-fuchsia-500">SECURE YOUR HANDLE.</span></h2>
-                   <div className="space-y-6">
-                      {[ 
-                        { icon: <CheckCircle2 className="text-green-500" />, text: "Early Bird Badges for first 1,000 signups" },
-                        { icon: <CheckCircle2 className="text-green-500" />, text: "Exclusive access to Beta Battles" },
-                        { icon: <CheckCircle2 className="text-green-500" />, text: "Surprise onboarding BOB coins" }
-                      ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-4">
-                           {item.icon}
-                           <span className="text-zinc-300 font-bold text-lg">{item.text}</span>
-                        </div>
-                      ))}
-                   </div>
-                </div>
-
-                <div className="bg-zinc-900 p-8 md:p-12 rounded-[40px] border border-zinc-800 shadow-2xl relative overflow-hidden">
-                   <div className="absolute top-0 right-0 w-32 h-32 bg-fuchsia-600/10 blur-3xl rounded-full" />
-                   
-                   {submitted ? (
-                     <div className="text-center py-10 animate-in fade-in zoom-in duration-500">
-                        <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                           <CheckCircle2 color="#22c55e" size={40} />
-                        </div>
-                        <h3 className="text-2xl font-black text-white mb-2">YOU'RE IN THE ARENA!</h3>
-                        <p className="text-zinc-500 font-medium">Keep an eye on your phone. We'll text you when your rank is ready.</p>
-                     </div>
-                   ) : (
-                     <form action={handleWaitlistSubmit} className="space-y-5">
-                        <div className="space-y-2">
-                           <label className="text-xs font-black text-zinc-500 uppercase tracking-widest ml-1">Player Identity</label>
-                           <input name="name" required className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 font-bold placeholder:text-zinc-700" placeholder="Display Name (e.g. BrainLord)" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                           <div className="space-y-2">
-                              <label className="text-xs font-black text-zinc-500 uppercase tracking-widest ml-1">Current Tier</label>
-                              <select name="class" required className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 font-bold appearance-none">
-                                {[6,7,8,9,10,11,12].map(c => <option key={c} value={c}>Class {c}</option>)}
-                              </select>
-                           </div>
-                           <div className="space-y-2">
-                              <label className="text-xs font-black text-zinc-500 uppercase tracking-widest ml-1">Zone</label>
-                              <input name="city" required className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 font-bold placeholder:text-zinc-700" placeholder="City" />
-                           </div>
-                        </div>
-                        <div className="space-y-2">
-                           <label className="text-xs font-black text-zinc-500 uppercase tracking-widest ml-1">Comms Link</label>
-                           <input name="phone" required type="tel" className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 font-bold placeholder:text-zinc-700" placeholder="WhatsApp Number" />
-                        </div>
-                        {error && <p className="text-red-500 text-sm font-bold ml-1">{error}</p>}
-                        <Button disabled={isPending} type="submit" className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:scale-[1.02] text-white mt-4 rounded-2xl py-8 font-black text-xl shadow-xl shadow-fuchsia-600/20 active:scale-95 transition-all">
-                           {isPending ? "Connecting..." : "JOIN THE WAITLIST"}
-                        </Button>
-                     </form>
-                   )}
-                </div>
-             </div>
-          </div>
-        </section>
-
-        {/* SCHOOL PARTNERSHIP SECTION */}
-        <section className="py-24 bg-zinc-900/20 border-t border-zinc-900 px-4">
-          <div className="max-w-4xl mx-auto rounded-[50px] bg-gradient-to-br from-violet-600 to-fuchsia-700 p-12 md:p-20 text-center relative overflow-hidden">
-             <div className="absolute inset-0 bg-black/20" />
-             <div className="relative z-10">
-                <School className="w-16 h-16 text-white/50 mx-auto mb-8" />
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-6 uppercase tracking-tight">Are you a Teacher?</h2>
-                <p className="text-white/80 text-xl font-bold mb-10 max-w-2xl mx-auto">Bring BOB to your school. Automate testing, track national benchmarking, and increase student engagement by 400%.</p>
-                <Link href="#waitlist">
-                  <Button variant="secondary" className="bg-white text-violet-600 hover:bg-zinc-100 font-black h-16 px-10 text-xl rounded-2xl transition-all active:scale-95 shadow-2xl">
-                    Get School Access
-                  </Button>
-                </Link>
-             </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="border-t border-zinc-900 py-16 px-4 bg-zinc-950">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
-           <div className="md:col-span-2">
-              <div className="flex items-center gap-2 mb-6">
-                <Brain className="w-6 h-6 text-violet-500" />
-                <span className="font-black text-xl tracking-tight text-white">BOB</span>
-              </div>
-              <p className="text-zinc-500 font-medium max-w-sm">The ultimate Gen-Z learning arena. We are building the future of classroom competition.</p>
-           </div>
-           <div>
-              <h4 className="text-white font-black uppercase tracking-widest text-sm mb-6">Legal</h4>
-              <div className="flex flex-col gap-4 text-zinc-500 font-bold">
-                 <Link href="#" className="hover:text-white">Privacy Policy</Link>
-                 <Link href="#" className="hover:text-white">Terms of Battle</Link>
-              </div>
-           </div>
-           <div>
-              <h4 className="text-white font-black uppercase tracking-widest text-sm mb-6">Connect</h4>
-              <div className="flex flex-col gap-4 text-zinc-500 font-bold">
-                 <Link href="#" className="hover:text-white">Instagram</Link>
-                 <Link href="#" className="hover:text-white">Twitter / X</Link>
-              </div>
-           </div>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8"
+          >
+             <Button 
+                onClick={handleStart} 
+                disabled={isPending}
+                size="lg" 
+                className="h-20 px-14 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-400 hover:to-emerald-300 text-green-950 font-black text-2xl shadow-[0_0_60px_rgba(34,197,94,0.4)] transition-all hover:scale-105 group active:scale-95 italic uppercase tracking-widest border border-green-300/50"
+             >
+                ENTER ARENA NOW <ChevronRight className="ml-4 w-8 h-8 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
+             </Button>
+          </motion.div>
         </div>
-        <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-zinc-900 text-center">
-            <p className="text-zinc-600 font-bold text-sm">© 2026 Battle of Brains. Built for the Elite.</p>
+      </section>
+
+      {/* Live Stats */}
+      <section className="py-20 border-y border-white/5 bg-[#16161e]/50 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+           {[
+             { label: "Active Warriors", value: "12,450+", icon: <Users className="text-violet-500" /> },
+             { label: "Battles Won", value: "854K", icon: <Trophy className="text-[#eab308]" /> },
+             { label: "XP Distributed", value: "1.2B", icon: <Zap className="text-blue-500" /> },
+             { label: "Success Rate", value: "98.4%", icon: <Shield className="text-emerald-500" /> },
+           ].map((stat, i) => (
+             <motion.div 
+               key={i}
+               initial={{ opacity: 0, y: 20 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               className="text-center space-y-3"
+             >
+               <div className="flex justify-center bg-white/5 w-16 h-16 rounded-2xl items-center mx-auto border border-white/10 mb-6">{stat.icon}</div>
+               <p className="text-4xl md:text-5xl font-black italic tracking-tighter">{stat.value}</p>
+               <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">{stat.label}</p>
+             </motion.div>
+           ))}
+        </div>
+      </section>
+
+      {/* Arena Features */}
+      <section id="features" className="py-32 px-6 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-24">
+             <h2 className="text-5xl md:text-6xl font-black italic uppercase tracking-tighter mb-4">Tactical Advantages</h2>
+             <p className="text-zinc-500 font-bold uppercase text-[12px] tracking-[0.4em]">Optimized for Student Supremacy</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "AI Quiz Forge",
+                desc: "Dynamic missions tailored to your specific Tier (Class) and weaknesses.",
+                icon: <Zap className="text-blue-500 w-8 h-8" />,
+                bg: "bg-blue-500/10",
+                glow: "group-hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] border-blue-500/20"
+              },
+              {
+                title: "The Vault",
+                desc: "Earn BOB Coins for every victory to unlock rare rewards and platform perks.",
+                icon: <Trophy className="text-[#eab308] w-8 h-8" />,
+                bg: "bg-[#eab308]/10",
+                glow: "group-hover:shadow-[0_0_40px_rgba(234,179,8,0.3)] border-[#eab308]/20"
+              },
+              {
+                title: "Global Arena",
+                desc: "Compete in real-time battles against students from across the subcontinent.",
+                icon: <Shield className="text-rose-500 w-8 h-8" />,
+                bg: "bg-rose-500/10",
+                glow: "group-hover:shadow-[0_0_40px_rgba(244,63,94,0.3)] border-rose-500/20"
+              }
+            ].map((f, i) => (
+              <motion.div 
+                key={i}
+                whileHover={{ y: -10 }}
+                className={`bg-[#1d1b27] p-10 rounded-[40px] border border-white/5 group cursor-default transition-all duration-500 ${f.glow}`}
+              >
+                <div className={`w-20 h-20 rounded-3xl ${f.bg} border ${f.glow} flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 transition-transform`}>
+                  {f.icon}
+                </div>
+                <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-4 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-zinc-500 transition-all">{f.title}</h3>
+                <p className="text-zinc-400 font-medium tracking-tight leading-relaxed">{f.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/5 py-24 px-6 md:px-12 bg-[#16161e] relative z-10">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 mb-20">
+          <div className="md:col-span-2 space-y-8">
+            <div className="flex items-center gap-3">
+               <span className="font-black italic text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
+                  BATTLE OF BRAINS
+               </span>
+            </div>
+            <p className="text-zinc-500 max-w-sm text-sm font-bold leading-relaxed uppercase tracking-widest">
+              The elite educational ecosystem for the high-achieving student of 2026. Join the ranks or get left behind.
+            </p>
+          </div>
+          
+          <div className="space-y-6">
+            <h4 className="text-[10px] font-black uppercase text-white tracking-[0.3em]">Command Sectors</h4>
+            <div className="flex flex-col gap-4 text-sm text-zinc-500 font-black italic uppercase tracking-widest">
+              <Link href="/dashboard" className="hover:text-violet-400 transition-colors">STUDENT ARENA</Link>
+              <Link href="/teacher" className="hover:text-cyan-400 transition-colors">TEACHER CORE</Link>
+              <Link href="/admin" className="hover:text-rose-400 transition-colors">ADMIN INTEL</Link>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h4 className="text-[10px] font-black uppercase text-white tracking-[0.3em]">Support Comms</h4>
+            <div className="flex flex-col gap-4 text-sm text-zinc-500 font-black italic uppercase tracking-widest">
+               <Link href="/faq" className="hover:text-white transition-colors">PROTOCOL (FAQ)</Link>
+               <Link href="/contact" className="hover:text-white transition-colors">SIGNAL HQ (CONTACT)</Link>
+               <Link href="/privacy" className="hover:text-white transition-colors">PRIVACY TERMS</Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+          <p className="text-zinc-700 font-black uppercase tracking-widest text-[9px]">
+            © 2026 BATTLE OF BRAINS ECOSYSTEM • SECURED CONNECTION
+          </p>
         </div>
       </footer>
     </div>

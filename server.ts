@@ -47,12 +47,12 @@ app.prepare().then(() => {
         const roomId = `battle_${p1.userId}_${p2.userId}_${Date.now()}`;
 
         // Fetch 5 random questions for the battle
-        const questionsDB = await prisma.question.findMany({ take: 10 });
+        const questionsDB = await prisma.quizQuestion.findMany({ take: 10 });
         const battleQuestions = questionsDB.sort(() => Math.random() - 0.5).slice(0, 5).map(q => ({
           id: q.id,
           text: q.text,
           options: JSON.parse(q.options),
-          correctOption: q.correctOption,
+          correctOption: q.correctIdx,
           timeLimit: 15 // Faster paced for multiplayer
         }));
 

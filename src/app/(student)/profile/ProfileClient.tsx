@@ -2,7 +2,8 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { User } from "@prisma/client";
-import { Trophy, Coins, BrainCircuit, Gamepad2, Gift } from "lucide-react";
+import { Trophy, Coins, BrainCircuit, Gamepad2, Gift, Edit } from "lucide-react";
+import Link from "next/link";
 
 export default function ProfileClient({ 
   user, 
@@ -19,12 +20,17 @@ export default function ProfileClient({
       <div className="md:col-span-1 space-y-6">
          <Card className="bg-zinc-900 border-zinc-800 text-center pt-8">
            <CardContent className="space-y-4">
-              <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-cyan-500 to-indigo-500 rounded-full flex items-center justify-center text-4xl font-black text-white shadow-[0_0_30px_rgba(6,182,212,0.3)]">
-                {user.name?.charAt(0) || "?"}
+              <div className="relative group">
+                <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-cyan-500 to-indigo-500 rounded-full flex items-center justify-center text-4xl font-black text-white shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+                  {user.name?.charAt(0) || "?"}
+                </div>
+                <Link href="/profile/edit" className="absolute bottom-0 right-1/2 translate-x-12 translate-y-1 p-2 bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-400 hover:text-white hover:border-violet-500 transition-all">
+                  <Edit size={14} />
+                </Link>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-1">{user.name}</h2>
-                <p className="text-zinc-400 text-sm">{user.phone}</p>
+                <h2 className="text-2xl font-bold text-white mb-1 tracking-tight italic uppercase">{user.name}</h2>
+                <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">{user.phone}</p>
               </div>
               
               <div className="pt-4 border-t border-zinc-800 grid grid-cols-2 gap-4">

@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 const secretKey = process.env.SESSION_SECRET || 'super-secret-key-bob-[2026]';
 const key = new TextEncoder().encode(secretKey);
@@ -35,13 +35,26 @@ export async function createSession(userId: string, role: string) {
     sameSite: 'lax',
     path: '/',
   });
+  return session;
 }
 
 export async function getSession() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get('session')?.value;
-  if (!session) return null;
-  return await decrypt(session);
+  try {
+    const cookieStore = await cookies();
+    let session = cookieStore.get('session')?.value;
+
+    if (!session) {
+      const authHeader = (await headers()).get('authorization');
+      if (authHeader?.startsWith('Bearer ')) {
+        session = authHeader.split(' ')[1];
+      }
+    }
+
+    if (!session) return null;
+    return await decrypt(session);
+  } catch (e) {
+    return null;
+  }
 }
 
 export async function logout() {

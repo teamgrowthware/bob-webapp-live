@@ -11,6 +11,7 @@ export default function AdminRedemptionsPage() {
   const [redemptions, setRedemptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [voucherInputs, setVoucherInputs] = useState<Record<string, string>>({});
 
   const fetchRedemptions = async () => {
     try {
@@ -32,11 +33,13 @@ export default function AdminRedemptionsPage() {
 
   const updateStatus = async (id: string, status: string) => {
     setUpdatingId(id);
+    const code = voucherInputs[id];
+    
     try {
       const res = await fetch(`/api/admin/redemptions/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status, code }),
       });
       if (res.ok) {
         await fetchRedemptions();
@@ -147,7 +150,13 @@ export default function AdminRedemptionsPage() {
                     <div className="flex items-center justify-end gap-2">
                       {r.status === "PENDING" && (
                         <>
-                          <Button 
+                          <Input 
+                            placeholder="Voucher Code (Opt)" 
+                            className="bg-zinc-950 border-zinc-800 text-white w-32 h-8 text-[10px] font-bold uppercase tracking-widest placeholder:text-zinc-600 focus-visible:ring-violet-500"
+                            value={voucherInputs[r.id] || ""}
+                            onChange={(e) => setVoucherInputs({...voucherInputs, [r.id]: e.target.value})}
+                          />
+                          <Button  
                             variant="outline" 
                             size="sm" 
                             className="bg-zinc-950 border-zinc-800 text-emerald-500 hover:bg-emerald-500/10 rounded-xl font-black text-[10px]"

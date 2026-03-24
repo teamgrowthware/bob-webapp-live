@@ -29,6 +29,7 @@ model User {
   updatedAt DateTime @updatedAt
   streak    Int      @default(0)
   lastActive DateTime?
+  pushToken String?
 
   // Parent-Child linkage
   parentId  String?
@@ -116,6 +117,7 @@ model QuizQuestion {
   options     String   // JSON string array
   correctIdx  Int
   explanation String?
+  timeLimit   Int      @default(30)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -230,3 +232,36 @@ model AdBanner {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model MemeTemplate {
+  id        String   @id @default(uuid())
+  imageUrl  String
+  minScore  Int
+  maxScore  Int
+  tone      String   // e.g., "SAVAGE", "COMPETITIVE", "MOTIVATING"
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Waitlist {
+  id        String   @id @default(uuid())
+  type      String
+  name      String
+  city      String
+  class     String?
+  phone     String
+  message   String?
+  createdAt DateTime @default(now())
+}
+
+model Battle {
+  id        String   @id @default(uuid())
+  player1Id String
+  player2Id String
+  p1Score   Int
+  p2Score   Int
+  winnerId  String?
+  createdAt DateTime @default(now())
+}
+

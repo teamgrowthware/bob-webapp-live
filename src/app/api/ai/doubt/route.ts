@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getSession } from "@/lib/session";
-import { generateDoubtExplanation } from "@/lib/ai";
+import { generateDoubtExplanation, generateEmbeddings } from "@/lib/ai";
 
 const prisma = new PrismaClient();
 
@@ -17,10 +17,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Question is required" }, { status: 400 });
     }
 
-    // 1. Generate explanation from Gemini
-    const aiResponse = await generateDoubtExplanation(question);
+    // 1. Vector Search for Curriculum Context (RAG)
+    let contextStr = "";
+    try {
+      const doubtEmbedding = await generateEmbeddings(question);
+      const vectorStr = `[${doubtEmbedding.join(",")}]`;
 
-    // 2. Save doubt interaction to database
+      const relevantChunks = await prisma.$queryRawUnsafe<any[]>(
+        `SELECT content, 1 - (embedding <=> $1::vector) as similarity 
+         FROM "EmbeddingChunk" 
+         ORDER BY embedding <=> $1::vector 
+         LIMIT 3`,
+        vectorStr
+      );
+
+      contextStr = relevantChunks.map(c => c.content).join("\n\n---\n\n");
+    } catch (embErr) {
+      console.warn("Vector search failed or skipped, falling back to pure LLM:", embErr);
+    }
+
+    // 2. Generate explanation from Gemini with Context
+    const aiResponse = await generateDoubtExplanation(question, contextStr);
+
+    // 3. Save doubt interaction to database
     const doubt = await prisma.doubt.create({
       data: {
         userId: session.userId,

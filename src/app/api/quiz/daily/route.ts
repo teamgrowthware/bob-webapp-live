@@ -30,32 +30,27 @@ export async function GET() {
               {
                 text: "What is the square root of 256?",
                 options: JSON.stringify(["14", "16", "18", "24"]),
-                correctOption: 1, // 0-indexed
-                timeLimit: 30
+                correctIdx: 1
               },
               {
                 text: "Which planet has the most moons?",
                 options: JSON.stringify(["Jupiter", "Saturn", "Uranus", "Neptune"]),
-                correctOption: 1,
-                timeLimit: 30
+                correctIdx: 1
               },
               {
                 text: "What does 'HTTP' stand for?",
                 options: JSON.stringify(["Hyper Text Transfer Protocol", "High Tier Text Processing", "Hyper Transfer Text Path", "Host Text Terminal Protocol"]),
-                correctOption: 0,
-                timeLimit: 30
+                correctIdx: 0
               },
               {
                 text: "If a train travels 120km in 2 hours, what is its speed?",
                 options: JSON.stringify(["50 km/h", "60 km/h", "70 km/h", "80 km/h"]),
-                correctOption: 1,
-                timeLimit: 45
+                correctIdx: 1
               },
               {
                 text: "Identify the odd one out.",
                 options: JSON.stringify(["Python", "Java", "C++", "HTML"]),
-                correctOption: 3,
-                timeLimit: 30
+                correctIdx: 3
               }
             ]
           }

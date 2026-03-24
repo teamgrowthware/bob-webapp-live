@@ -11,7 +11,7 @@ const genAI = new GoogleGenerativeAI(apiKey || "");
 export type GeneratedQuestion = {
   text: string;
   options: string[];
-  correctOption: number;
+  correctIdx: number;
   timeLimit: number;
 };
 
@@ -40,7 +40,7 @@ ${contextPrompt}
 Guidelines:
 - The tone should be slightly humorous, modern, and engaging (Gen-Z vibe), while still being educational and factually accurate.
 - Each question must have exactly 4 options.
-- The 'correctOption' must be the index (0, 1, 2, or 3) of the correct answer in your options array.
+- The 'correctIdx' must be the index (0, 1, 2, or 3) of the correct answer in your options array.
 - 'timeLimit' for each question should be a number (usually 15, 30, 45, or 60) based on how difficult the calculation/thought process is.
 
 Return the response PURELY as a JSON array of objects. Do not wrap it in markdown blockquotes or add any other text.
@@ -49,7 +49,7 @@ The JSON array should have this exact structure:
   {
     "text": "Question text here...",
     "options": ["Option A", "Option B", "Option C", "Option D"],
-    "correctOption": 1,
+    "correctIdx": 1,
     "timeLimit": 30
   }
 ]
@@ -142,17 +142,22 @@ export async function analyzeSyllabus(
   }
 }
 
-export async function generateDoubtExplanation(question: string): Promise<string> {
+export async function generateDoubtExplanation(question: string, context?: string): Promise<string> {
   if (!apiKey) {
     throw new Error("GEMINI_API_KEY is missing. Please add it to your .env file.");
   }
 
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
+  const contextPrompt = context 
+    ? `\nHere is some contextual information from the verified syllabus to base your answer accurately:\n"""\n${context}\n"""`
+    : "";
+
   const prompt = `
 You are a helpful, brilliant, and slightly Gen-Z flavored teacher for "Battle of Brains" - a learning platform.
 A student in Class 6-12 has asked the following doubt:
 "${question}"
+${contextPrompt}
 
 Explain the answer to them step-by-step. 
 Guidelines:
@@ -175,7 +180,7 @@ export async function generateEmbeddings(text: string): Promise<number[]> {
     throw new Error("GEMINI_API_KEY is missing.");
   }
 
-  const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
+  const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
 
   try {
     const result = await model.embedContent(text);

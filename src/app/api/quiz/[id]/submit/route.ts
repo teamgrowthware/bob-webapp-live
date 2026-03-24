@@ -38,7 +38,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       const q = quiz.questions.find(x => x.id === ans.questionId);
       if (q) {
         totalTimeSpent += ans.timeSpent;
-        if (ans.selectedOption === q.correctOption) {
+        if (ans.selectedOption === q.correctIdx) {
           correctCount++;
           let speedBonus = Math.floor(Math.max(0, ((q.timeLimit - ans.timeSpent) / q.timeLimit) * 50));
           totalScore += (100 + speedBonus);

@@ -1,7 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
@@ -31,9 +33,23 @@ export async function POST(req: Request) {
     const result = await model.generateContent(prompt);
     const feedback = result.response.text();
 
-    return NextResponse.json({ feedback });
+    const templates = await prisma.memeTemplate.findMany({
+      where: {
+        isActive: true,
+        minScore: { lte: scorePercent },
+        maxScore: { gte: scorePercent }
+      }
+    });
+
+    let memeUrl = null;
+    if (templates.length > 0) {
+      const randomIdx = Math.floor(Math.random() * templates.length);
+      memeUrl = templates[randomIdx].imageUrl;
+    }
+
+    return NextResponse.json({ feedback, memeUrl });
   } catch (error) {
     console.error("AI Feedback Error:", error);
-    return NextResponse.json({ feedback: "The arena is silent. Even the AI is speechless at that performance." }, { status: 500 });
+    return NextResponse.json({ feedback: "The arena is silent. Even the AI is speechless at that performance.", memeUrl: null }, { status: 500 });
   }
 }

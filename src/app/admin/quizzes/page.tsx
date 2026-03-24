@@ -1,135 +1,67 @@
 "use client";
 
-import { useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Search, Library, Plus, Filter, MoreVertical, CheckCircle2, AlertCircle, Eye } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Plus, Swords, Calendar, Eye, Trash2, Edit } from "lucide-react";
 
-export default function AdminGlobalQuizzes() {
-  const [quizzes, setQuizzes] = useState([
-    { id: "1", title: "National Brainiac Open", subject: "General Knowledge", author: "SYSTEM", class: "ALL", status: "LIVE", attempts: 4520 },
-    { id: "2", title: "Calculus Mastery II", subject: "Math", author: "Dr. Sameer", class: "12", status: "PENDING_REVIEW", attempts: 0 },
-    { id: "3", title: "Chemistry: Organic Basics", subject: "Science", author: "Prof. Malhotra", class: "11", status: "LIVE", attempts: 1240 },
-    { id: "4", title: "Indian Constitution 101", subject: "Civics", author: "SYSTEM", class: "9", status: "DRAFT", attempts: 0 },
-  ]);
+export default function QuizzesAdmin() {
+  const [quizzes, setQuizzes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/quizzes")
+      .then(res => res.json())
+      .then(data => {
+        setQuizzes(data);
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    <div className="p-10 space-y-10 animate-in fade-in duration-500">
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+    <div className="space-y-10">
+      <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-4xl font-black tracking-tight text-white uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-600">Global Quizzry</h1>
-          <p className="text-zinc-500 font-bold uppercase tracking-[0.2em] text-xs mt-2">Manage the collective knowledge repository</p>
+          <h1 className="text-4xl font-black italic uppercase tracking-tighter">Strategic Depot</h1>
+          <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs mt-2">Manage the Battle Question bank</p>
         </div>
-        <div className="flex gap-4">
-           <Button className="bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white font-black px-6 rounded-2xl h-14">
-              EXPORTS
-           </Button>
-           <Button className="bg-white text-black hover:bg-zinc-200 font-black px-8 rounded-2xl h-14 shadow-xl active:scale-95 transition-all">
-              <Plus size={20} className="mr-2" /> CREATE SYSTEM QUIZ
-           </Button>
-        </div>
-      </header>
-
-      {/* Quiz Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-         <Card className="bg-zinc-900 border-zinc-800 rounded-3xl p-8 flex items-center justify-between border-t-4 border-t-emerald-500">
-            <div>
-               <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest">Live Battles</p>
-               <h3 className="text-3xl font-black text-white">42 Active</h3>
-            </div>
-            <div className="p-4 bg-emerald-500/10 rounded-2xl">
-               <CheckCircle2 className="text-emerald-500" size={24} />
-            </div>
-         </Card>
-         <Card className="bg-zinc-900 border-zinc-800 rounded-3xl p-8 flex items-center justify-between border-t-4 border-t-amber-500">
-            <div>
-               <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest">Needs Review</p>
-               <h3 className="text-3xl font-black text-white">12 Pending</h3>
-            </div>
-            <div className="p-4 bg-amber-500/10 rounded-2xl">
-               <AlertCircle className="text-amber-500" size={24} />
-            </div>
-         </Card>
-         <Card className="bg-zinc-900 border-zinc-800 rounded-3xl p-8 flex items-center justify-between border-t-4 border-t-violet-500">
-            <div>
-               <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest">Total Repos</p>
-               <h3 className="text-3xl font-black text-white">850+ Quizzes</h3>
-            </div>
-            <div className="p-4 bg-violet-500/10 rounded-2xl">
-               <Library className="text-violet-500" size={24} />
-            </div>
-         </Card>
+        <button className="bg-violet-600 hover:bg-violet-500 text-white font-black px-6 py-4 rounded-2xl flex items-center gap-3 transition-all active:scale-95 shadow-lg shadow-violet-600/20 uppercase tracking-tight italic">
+           <Plus size={20} /> Deploy New Quiz
+        </button>
       </div>
 
-      {/* Global Quiz Table */}
-      <Card className="bg-zinc-900 border-zinc-800 rounded-[40px] overflow-hidden shadow-2xl">
-        <div className="p-8 border-b border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-6">
-           <div className="relative w-full md:w-96">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 w-5 h-5" />
-              <Input placeholder="Search global quizzes..." className="bg-zinc-950 border-zinc-800 text-white pl-12 h-12 rounded-xl font-bold" />
-           </div>
-           <div className="flex gap-4">
-              <Button variant="outline" className="border-zinc-800 text-zinc-400 font-black rounded-xl">
-                 <Filter size={16} className="mr-2" /> FILTER BY SUBJECT
-              </Button>
-           </div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {loading ? (
+             <div className="col-span-full py-20 text-center font-black italic text-zinc-700 uppercase">Loading Armory...</div>
+        ) : quizzes.map((quiz) => (
+          <div key={quiz.id} className="bg-zinc-900/40 border border-zinc-900 rounded-[32px] p-8 flex flex-col justify-between group hover:border-violet-500/30 transition-all duration-500 relative overflow-hidden">
+             {quiz.title.includes("[DAILY]") && (
+                <div className="absolute top-0 right-0 bg-amber-500 text-black text-[10px] font-black px-4 py-1 skew-x-[-20deg] mr-[-10px]">DAILY ACTIVE</div>
+             )}
+             
+             <div>
+                <div className="flex items-center gap-2 mb-4">
+                   <div className="bg-zinc-950 p-2 rounded-xl border border-zinc-800">
+                      <Swords size={16} className="text-violet-500" />
+                   </div>
+                   <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{quiz.category} • {quiz.difficulty}</span>
+                </div>
+                <h3 className="text-xl font-black italic uppercase tracking-tight text-white mb-2 line-clamp-1">{quiz.title.replace("[DAILY]", "").trim()}</h3>
+                <p className="text-zinc-500 font-bold text-xs uppercase mb-6">{quiz.questions?.length || 0} Critical Vectors (Questions)</p>
+             </div>
 
-        <Table>
-          <TableHeader className="bg-zinc-950/50">
-            <TableRow className="border-zinc-800 h-16">
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px] px-10">Quiz Name</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px]">Author</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px]">Target Class</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px]">Analytics (Attempts)</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px]">Status</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px] text-right px-10">Ops</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {quizzes.map((q) => (
-              <TableRow key={q.id} className="border-zinc-800 hover:bg-zinc-800/30 transition-colors h-20">
-                <TableCell className="px-10">
-                   <div className="flex flex-col">
-                      <span className="font-black text-white text-base leading-tight">{q.title}</span>
-                      <span className="text-[10px] text-zinc-600 font-bold tracking-tight uppercase">{q.subject}</span>
-                   </div>
-                </TableCell>
-                <TableCell>
-                   <span className={`font-bold ${q.author === 'SYSTEM' ? 'text-violet-400' : 'text-zinc-400'}`}>
-                      {q.author}
-                   </span>
-                </TableCell>
-                <TableCell className="font-black text-zinc-500">CLASS {q.class}</TableCell>
-                <TableCell>
-                   <span className="font-black text-white">{q.attempts.toLocaleString()}</span>
-                </TableCell>
-                <TableCell>
-                   <span className={`px-2 py-1 rounded-md text-[10px] font-black tracking-tighter border ${
-                      q.status === 'LIVE' ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" :
-                      q.status === 'PENDING_REVIEW' ? "bg-amber-500/10 text-amber-500 border-amber-500/20" :
-                      "bg-zinc-800 text-zinc-500 border-zinc-700"
-                   }`}>
-                      {q.status}
-                   </span>
-                </TableCell>
-                <TableCell className="text-right px-10">
-                   <div className="flex items-center justify-end gap-3">
-                      <button className="text-zinc-600 hover:text-white transition-colors">
-                         <Eye size={18} />
-                      </button>
-                      <button className="text-zinc-600 hover:text-white transition-colors">
-                         <MoreVertical size={18} />
-                      </button>
-                   </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Card>
+             <div className="flex gap-2 pt-6 border-t border-zinc-900/50">
+                <button className="flex-1 bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-white py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+                   <Eye size={14} /> <span className="text-[10px] font-black uppercase">Inspect</span>
+                </button>
+                <button className="flex-1 bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+                   <Calendar size={14} /> <span className="text-[10px] font-black uppercase">Schedule</span>
+                </button>
+                <button className="p-3 bg-zinc-950 border border-zinc-800 text-zinc-700 hover:text-red-500 transition-all rounded-xl">
+                   <Trash2 size={14} />
+                </button>
+             </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

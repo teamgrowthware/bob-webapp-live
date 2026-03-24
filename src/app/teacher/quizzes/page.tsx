@@ -13,7 +13,7 @@ export default function TeacherQuizzesPage() {
   // Manual Form State
   const [title, setTitle] = useState("");
   const [subject, setSubject] = useState("");
-  const [questions, setQuestions] = useState([{ text: "", options: ["", "", "", ""], correctOption: 0 }]);
+  const [questions, setQuestions] = useState([{ text: "", options: ["", "", "", ""], correctIdx: 0 }]);
   const [manualLoading, setManualLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -28,7 +28,7 @@ export default function TeacherQuizzesPage() {
   const [aiTopics, setAiTopics] = useState<string[]>([]);
 
   const handleAddQuestion = () => {
-    setQuestions([...questions, { text: "", options: ["", "", "", ""], correctOption: 0 }]);
+    setQuestions([...questions, { text: "", options: ["", "", "", ""], correctIdx: 0 }]);
   };
 
   const handleQuestionChange = (index: number, field: string, value: any) => {
@@ -57,7 +57,7 @@ export default function TeacherQuizzesPage() {
         setMsg("Quiz dropped successfully!");
         setTitle("");
         setSubject("");
-        setQuestions([{ text: "", options: ["", "", "", ""], correctOption: 0 }]);
+        setQuestions([{ text: "", options: ["", "", "", ""], correctIdx: 0 }]);
       } else {
         setMsg("Failed to drop quiz.");
       }
@@ -204,12 +204,12 @@ export default function TeacherQuizzesPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                       {q.options.map((opt, optIdx) => (
-                        <div key={optIdx} className={`flex items-center gap-4 bg-zinc-950 p-4 rounded-2xl border transition-all ${q.correctOption === optIdx ? "border-violet-500 bg-violet-500/5" : "border-zinc-800"}`}>
+                        <div key={optIdx} className={`flex items-center gap-4 bg-zinc-950 p-4 rounded-2xl border transition-all ${q.correctIdx === optIdx ? "border-violet-500 bg-violet-500/5" : "border-zinc-800"}`}>
                           <input
                             type="radio"
                             name={`correct-${idx}`}
-                            checked={q.correctOption === optIdx}
-                            onChange={() => handleQuestionChange(idx, "correctOption", optIdx)}
+                            checked={q.correctIdx === optIdx}
+                            onChange={() => handleQuestionChange(idx, "correctIdx", optIdx)}
                             className="w-5 h-5 accent-violet-500 cursor-pointer"
                           />
                           <Input required value={opt} onChange={e => handleOptionChange(idx, optIdx, e.target.value)} placeholder={`Choice ${optIdx + 1}`} className="bg-transparent border-none text-white font-bold h-10 px-0 focus-visible:ring-0" />

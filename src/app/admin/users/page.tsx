@@ -1,136 +1,91 @@
 "use client";
 
-import { useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Search, ShieldCheck, UserHero, UserCheck, School, MoreVertical, ShieldAlert, CheckCircle2, XCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Search, Filter, Shield, MoreVertical } from "lucide-react";
 
-export default function AdminUserManagement() {
-  const [users, setUsers] = useState([
-    { id: "1", name: "Dr. Sameer", email: "sameer@school.com", role: "TEACHER", school: "Brainiacs Academy", status: "PENDING", date: "2026-03-15" },
-    { id: "2", name: "Modern High School", email: "admin@modernhigh.edu", role: "SCHOOL_ADMIN", school: "Modern High", status: "APPROVED", date: "2026-03-14" },
-    { id: "3", name: "Sarah Khan", email: "sarah@gmail.com", role: "STUDENT", school: "Greenwood High", status: "APPROVED", date: "2026-03-14" },
-    { id: "4", name: "Prof. Malhotra", email: "malhotra@pune.edu", role: "TEACHER", school: "Pune Public", status: "PENDING", date: "2026-03-13" },
-  ]);
+export default function UsersAdmin() {
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/users")
+      .then(res => res.json())
+      .then(data => {
+        setUsers(data);
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    <div className="p-10 space-y-10 animate-in fade-in duration-500">
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+    <div className="space-y-10">
+      <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-4xl font-black tracking-tight text-white uppercase italic">Access Control</h1>
-          <p className="text-zinc-500 font-bold uppercase tracking-[0.2em] text-xs mt-2">Manage Citizens, Enforcers and Territories</p>
+          <h1 className="text-4xl font-black italic uppercase tracking-tighter">Citizen Management</h1>
+          <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs mt-2">Manage the BOB population</p>
         </div>
         <div className="flex gap-4">
-           <Button className="bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white font-black px-6 rounded-2xl h-14">
-              MASS ACTION
-           </Button>
-           <Button className="bg-white text-black hover:bg-zinc-200 font-black px-8 rounded-2xl h-14 shadow-xl active:scale-95 transition-all">
-              INITIALIZE USER
-           </Button>
-        </div>
-      </header>
-
-      {/* Verification Queue */}
-      <section>
-         <div className="flex items-center gap-2 mb-6 ml-2">
-            <ShieldAlert className="text-rose-500" size={20} />
-            <h2 className="text-sm font-black text-rose-500 uppercase tracking-widest">Awaiting Verification ({users.filter(u => u.status === 'PENDING').length})</h2>
-         </div>
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {users.filter(u => u.status === 'PENDING').map((u) => (
-               <Card key={u.id} className="bg-zinc-900 border-rose-500/20 rounded-[32px] overflow-hidden group hover:border-rose-500/50 transition-all shadow-2xl">
-                  <CardContent className="p-8 flex justify-between items-center">
-                     <div className="flex items-center gap-5">
-                        <div className="w-16 h-16 bg-zinc-950 rounded-2xl flex items-center justify-center border border-zinc-800">
-                           {u.role === 'TEACHER' ? <ShieldCheck className="text-rose-500" size={32} /> : <School className="text-rose-500" size={32} />}
-                        </div>
-                        <div>
-                           <h3 className="text-xl font-black text-white leading-none mb-2">{u.name}</h3>
-                           <p className="text-zinc-500 text-xs font-bold uppercase tracking-tight">{u.role} @ {u.school}</p>
-                           <p className="text-[10px] text-zinc-600 font-black mt-1">{u.email}</p>
-                        </div>
-                     </div>
-                     <div className="flex flex-col gap-2">
-                        <button className="bg-emerald-500/10 text-emerald-500 p-3 rounded-xl border border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-all">
-                           <CheckCircle2 size={24} />
-                        </button>
-                        <button className="bg-rose-500/10 text-rose-500 p-3 rounded-xl border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all">
-                           <XCircle size={24} />
-                        </button>
-                     </div>
-                  </CardContent>
-               </Card>
-            ))}
-         </div>
-      </section>
-
-      {/* Global User Table */}
-      <Card className="bg-zinc-900 border-zinc-800 rounded-[40px] overflow-hidden shadow-2xl">
-        <div className="p-8 border-b border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-6">
-           <div className="relative w-full md:w-96">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 w-5 h-5" />
-              <Input placeholder="Search global registry..." className="bg-zinc-950 border-zinc-800 text-white pl-12 h-12 rounded-xl font-bold" />
+           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl px-4 flex items-center gap-3 h-12">
+              <Search size={18} className="text-zinc-600" />
+              <input placeholder="Search users..." className="bg-transparent border-none focus:outline-none text-sm font-bold placeholder:text-zinc-700" />
            </div>
-           <div className="flex gap-4">
-              {['ALL', 'STUDENT', 'TEACHER', 'SCHOOL'].map(f => (
-                <button key={f} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
-                   f === 'ALL' ? "bg-white text-black border-white" : "bg-zinc-950 text-zinc-600 border-zinc-800 hover:text-white"
-                }`}>
-                   {f}
-                </button>
-              ))}
-           </div>
+           <button className="bg-zinc-900 border border-zinc-800 p-3 rounded-2xl text-zinc-500 hover:text-white transition-colors">
+              <Filter size={18} />
+           </button>
         </div>
+      </div>
 
-        <Table>
-          <TableHeader className="bg-zinc-950/50">
-            <TableRow className="border-zinc-800 h-16">
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px] px-10">User Identity</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px]">Territory (School)</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px]">Permission Tier</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px]">Standing</TableHead>
-              <TableHead className="font-black text-zinc-600 uppercase tracking-widest text-[10px] text-right px-10">Operations</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((u) => (
-              <TableRow key={u.id} className="border-zinc-800 hover:bg-zinc-800/30 transition-colors h-20">
-                <TableCell className="px-10">
-                   <div className="flex flex-col">
-                      <span className="font-black text-white text-base leading-tight">{u.name}</span>
-                      <span className="text-[10px] text-zinc-600 font-bold tracking-tight">{u.email}</span>
-                   </div>
-                </TableCell>
-                <TableCell className="font-bold text-zinc-400">{u.school}</TableCell>
-                <TableCell>
-                   <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-widest border ${
-                      u.role === 'TEACHER' ? "bg-violet-500/10 text-violet-400 border-violet-500/20" :
-                      u.role === 'SCHOOL_ADMIN' ? "bg-blue-500/10 text-blue-400 border-blue-500/20" :
-                      "bg-zinc-800 text-zinc-500 border-zinc-700"
-                   }`}>
-                      {u.role}
-                   </span>
-                </TableCell>
-                <TableCell>
-                   <div className="flex items-center gap-2">
-                      <div className={`w-1.5 h-1.5 rounded-full ${u.status === 'APPROVED' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                      <span className={`text-[10px] font-black uppercase tracking-widest ${u.status === 'APPROVED' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                         {u.status}
-                      </span>
-                   </div>
-                </TableCell>
-                <TableCell className="text-right px-10">
-                   <button className="text-zinc-600 hover:text-white transition-colors">
-                      <MoreVertical size={20} />
-                   </button>
-                </TableCell>
-              </TableRow>
+      <div className="bg-zinc-900/30 border border-zinc-900 rounded-[40px] overflow-hidden">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="border-b border-zinc-900 bg-zinc-950/50">
+              <th className="px-8 py-6 text-xs font-black uppercase text-zinc-500 tracking-widest">User</th>
+              <th className="px-8 py-6 text-xs font-black uppercase text-zinc-500 tracking-widest">Role</th>
+              <th className="px-8 py-6 text-xs font-black uppercase text-zinc-500 tracking-widest">Stats</th>
+              <th className="px-8 py-6 text-xs font-black uppercase text-zinc-500 tracking-widest">Joined</th>
+              <th className="px-8 py-6 text-xs font-black uppercase text-zinc-500 tracking-widest"></th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-zinc-900">
+            {loading ? (
+              <tr><td colSpan={5} className="px-8 py-20 text-center font-black italic text-zinc-700 uppercase">Retrieving Database...</td></tr>
+            ) : users.map((user) => (
+              <tr key={user.id} className="hover:bg-zinc-900/40 transition-colors group">
+                <td className="px-8 py-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-violet-600/20 items-center justify-center flex font-black text-violet-500 italic uppercase">
+                      {user.name?.[0] || user.phone[0]}
+                    </div>
+                    <div>
+                      <div className="font-black text-white italic uppercase">{user.name || "Anonymous Brain"}</div>
+                      <div className="text-xs font-bold text-zinc-500">{user.phone}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-8 py-6">
+                  <span className={`text-[10px] font-black uppercase px-2 py-1 rounded-md border ${
+                    user.role === 'ADMIN' ? 'bg-red-500/10 text-red-500 border-red-500/20' : 
+                    user.role === 'TEACHER' ? 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20' : 
+                    'bg-violet-500/10 text-violet-500 border-violet-500/20'
+                  }`}>
+                    {user.role}
+                  </span>
+                </td>
+                <td className="px-8 py-6">
+                  <div className="text-xs font-bold text-zinc-300 tracking-tight">{user.xp?.toLocaleString()} XP • {user.coins} Coins</div>
+                </td>
+                <td className="px-8 py-6">
+                  <div className="text-xs font-bold text-zinc-500 uppercase">{new Date(user.createdAt).toLocaleDateString()}</div>
+                </td>
+                <td className="px-8 py-6 text-right">
+                  <button className="text-zinc-700 hover:text-white transition-colors">
+                    <MoreVertical size={18} />
+                  </button>
+                </td>
+              </tr>
             ))}
-          </TableBody>
-        </Table>
-      </Card>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

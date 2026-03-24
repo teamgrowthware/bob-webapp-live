@@ -8,13 +8,25 @@ import { Search, UserPlus, Filter, MoreVertical, GraduationCap, TrendingUp, Aler
 import { Button } from "@/components/ui/button";
 
 export default function TeacherStudentsPage() {
-  const [students, setStudents] = useState([
-    { id: "1", name: "Aryan Sharma", class: "10-A", xp: 12500, coins: 450, accuracy: "88%", rank: 1, lastActive: "10 mins ago" },
-    { id: "2", name: "Ishita Gupta", class: "10-A", xp: 11200, coins: 320, accuracy: "82%", rank: 2, lastActive: "1 hour ago" },
-    { id: "3", name: "Kabir Verma", class: "10-B", xp: 9800, coins: 210, accuracy: "75%", rank: 5, lastActive: "Yesterday" },
-    { id: "4", name: "Meera Reddy", class: "10-A", xp: 8500, coins: 150, accuracy: "91%", rank: 8, lastActive: "3 days ago" },
-    { id: "5", name: "Rohan Malhotra", class: "10-C", xp: 7200, coins: 100, accuracy: "64%", rank: 15, lastActive: "1 week ago" },
-  ]);
+  const [students, setStudents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const res = await fetch("/api/teacher/students");
+      if (res.ok) {
+        setStudents(await res.json());
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="p-8 space-y-8 animate-in fade-in duration-500">
@@ -95,12 +107,24 @@ export default function TeacherStudentsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {students.map((student) => (
+            {loading ? (
+              <TableRow>
+                 <TableCell colSpan={6} className="text-center py-24 text-zinc-500 font-bold uppercase tracking-widest">
+                    Loading Battalion Data...
+                 </TableCell>
+              </TableRow>
+            ) : students.length === 0 ? (
+              <TableRow>
+                 <TableCell colSpan={6} className="text-center py-24 text-zinc-500 font-bold uppercase tracking-widest">
+                    No students found. Enroll them first.
+                 </TableCell>
+              </TableRow>
+            ) : students.map((student) => (
               <TableRow key={student.id} className="border-zinc-800 hover:bg-zinc-800/30 transition-colors">
                 <TableCell className="px-8 py-5">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-600 to-fuchsia-500 flex items-center justify-center font-black text-xs text-white shadow-lg">
-                      {student.name.split(' ').map(n => n[0]).join('')}
+                      {(student.name || "U")[0].toUpperCase()}
                     </div>
                     <div>
                        <p className="font-black text-white text-base">{student.name}</p>

@@ -1,47 +1,43 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Loader2 } from "lucide-react"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
-export default function QuizRedirectPage() {
-  const router = useRouter()
-  const [error, setError] = useState("")
+export default function DailyQuizRedirectPage() {
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchDailyQuiz() {
       try {
-        const res = await fetch("/api/quiz/daily")
-        const data = await res.json()
-
-        if (!res.ok) throw new Error(data.error || "Failed to fetch quiz")
+        const res = await fetch("/api/quiz/daily");
+        const data = await res.json();
 
         if (data.alreadyAttempted) {
-          router.replace("/dashboard?error=already_attempted")
-          return
+          router.push("/dashboard?error=already_attempted");
+          return;
         }
 
-        if (data.quiz) {
-          router.replace(`/quiz/${data.quiz.id}`)
+        if (data.success && data.quiz?.id) {
+          router.push("/quiz/" + data.quiz.id);
+        } else {
+          console.error("Failed to load daily quiz", data);
+          router.push("/dashboard");
         }
-      } catch (err: any) {
-        setError(err.message)
+      } catch (error) {
+        console.error("Error fetching daily quiz", error);
+        router.push("/dashboard");
       }
     }
 
-    fetchDailyQuiz()
-  }, [router])
+    fetchDailyQuiz();
+  }, [router]);
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
-      {error ? (
-        <div className="bg-red-500/10 text-red-400 p-4 rounded-xl max-w-md text-center">{error}</div>
-      ) : (
-        <div className="flex flex-col items-center gap-4 text-zinc-400">
-          <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
-          <p className="font-medium animate-pulse">Summoning today's battle...</p>
-        </div>
-      )}
+    <div className="min-h-screen bg-[#111116] flex flex-col items-center justify-center text-white">
+       <Loader2 className="w-12 h-12 text-cyan-500 animate-spin mb-4" />
+       <h1 className="text-2xl font-black italic tracking-tighter uppercase">Initializing Daily Savage Quiz...</h1>
+       <p className="text-zinc-500 font-bold mt-2 uppercase tracking-widest text-[10px]">Prepare for glory</p>
     </div>
-  )
+  );
 }

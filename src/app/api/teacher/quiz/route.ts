@@ -16,8 +16,8 @@ export async function POST(request: Request) {
           create: questions.map((q: any) => ({
             text: q.text,
             options: JSON.stringify(q.options),
-            correctOption: q.correctOption,
-            timeLimit: 30
+            correctIdx: q.correctIdx ?? q.correctOption,
+            timeLimit: q.timeLimit || 30
           }))
         }
       }

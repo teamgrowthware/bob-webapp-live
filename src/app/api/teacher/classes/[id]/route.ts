@@ -4,16 +4,17 @@ import { getSession } from "@/lib/session";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getSession();
     if (!session || session.role !== "TEACHER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const classroom = await prisma.classroom.findFirst({
-      where: { id: params.id, teacherId: session.userId },
+      where: { id: id, teacherId: session.userId },
       include: {
         students: {
           include: {

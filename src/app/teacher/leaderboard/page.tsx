@@ -1,18 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Trophy, Crown, Medal, TrendingUp, Users, Target } from "lucide-react";
 
 export default function SchoolLeaderboardPage() {
-  const [topStudents, setTopStudents] = useState([
-    { rank: 1, name: "Aryan Sharma", xp: 125000, badges: 24, winRate: "92%", class: "10-A" },
-    { rank: 2, name: "Ishita Gupta", xp: 118000, badges: 18, winRate: "88%", class: "10-B" },
-    { rank: 3, name: "Kabir Verma", xp: 98000, badges: 15, winRate: "85%", class: "10-A" },
-    { rank: 4, name: "Meera Reddy", xp: 85000, badges: 12, winRate: "80%", class: "12-C" },
-    { rank: 5, name: "Rohan Malhotra", xp: 72000, badges: 9, winRate: "78%", class: "11-A" },
-  ]);
+  const [topStudents, setTopStudents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLeaderboard();
+  }, []);
+
+  const fetchLeaderboard = async () => {
+    try {
+      const res = await fetch("/api/teacher/students");
+      if (res.ok) {
+        const data = await res.json();
+        setTopStudents(data.slice(0, 10)); // Get top 10
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+     return <div className="p-24 text-center text-zinc-500 font-black uppercase tracking-widest text-xl">Loading Leaderboard...</div>;
+  }
+  
+  if (topStudents.length === 0) {
+     return <div className="p-24 text-center text-zinc-500 font-black uppercase tracking-widest text-xl">No players in your academy yet.</div>;
+  }
 
   return (
     <div className="p-8 space-y-8 animate-in fade-in duration-500">
@@ -29,9 +50,9 @@ export default function SchoolLeaderboardPage() {
                <Medal color="#d4d4d8" size={32} />
             </div>
             <div className="w-20 h-20 bg-gradient-to-tr from-zinc-700 to-zinc-500 rounded-full mx-auto mb-4 border-4 border-zinc-800 shadow-xl" />
-            <h3 className="font-black text-white text-xl uppercase tracking-tight">{topStudents[1].name}</h3>
-            <p className="text-zinc-500 text-xs font-black uppercase mb-4">{topStudents[1].class}</p>
-            <div className="text-2xl font-black text-white tracking-widest">{topStudents[1].xp.toLocaleString()}<span className="text-xs text-zinc-500 ml-1">XP</span></div>
+            <h3 className="font-black text-white text-xl uppercase tracking-tight">{topStudents[1]?.name || "N/A"}</h3>
+            <p className="text-zinc-500 text-xs font-black uppercase mb-4">{topStudents[1]?.class || "--"}</p>
+            <div className="text-2xl font-black text-white tracking-widest">{topStudents[1]?.xp?.toLocaleString() || 0}<span className="text-xs text-zinc-500 ml-1">XP</span></div>
          </div>
 
          {/* Rank 1 */}
@@ -40,9 +61,9 @@ export default function SchoolLeaderboardPage() {
                <Crown color="#fff" size={40} />
             </div>
             <div className="w-28 h-28 bg-gradient-to-tr from-violet-600 to-fuchsia-500 rounded-full mx-auto mb-6 border-4 border-zinc-900 shadow-2xl" />
-            <h3 className="font-black text-white text-2xl uppercase tracking-tight">{topStudents[0].name}</h3>
-            <p className="text-violet-400 text-sm font-black uppercase mb-6 tracking-widest font-sans">{topStudents[0].class}</p>
-            <div className="text-4xl font-black text-white tracking-tighter">{topStudents[0].xp.toLocaleString()}<span className="text-sm text-violet-500 ml-1">XP</span></div>
+            <h3 className="font-black text-white text-2xl uppercase tracking-tight">{topStudents[0]?.name || "N/A"}</h3>
+            <p className="text-violet-400 text-sm font-black uppercase mb-6 tracking-widest font-sans">{topStudents[0]?.class || "--"}</p>
+            <div className="text-4xl font-black text-white tracking-tighter">{topStudents[0]?.xp?.toLocaleString() || 0}<span className="text-sm text-violet-500 ml-1">XP</span></div>
          </div>
 
          {/* Rank 3 */}
@@ -51,9 +72,9 @@ export default function SchoolLeaderboardPage() {
                <Medal color="#7c2d12" size={32} />
             </div>
             <div className="w-20 h-20 bg-gradient-to-tr from-orange-800 to-orange-600 rounded-full mx-auto mb-4 border-4 border-zinc-800 shadow-xl" />
-            <h3 className="font-black text-white text-xl uppercase tracking-tight">{topStudents[2].name}</h3>
-            <p className="text-zinc-500 text-xs font-black uppercase mb-4">{topStudents[2].class}</p>
-            <div className="text-2xl font-black text-white tracking-widest">{topStudents[2].xp.toLocaleString()}<span className="text-xs text-zinc-500 ml-1">XP</span></div>
+            <h3 className="font-black text-white text-xl uppercase tracking-tight">{topStudents[2]?.name || "N/A"}</h3>
+            <p className="text-zinc-500 text-xs font-black uppercase mb-4">{topStudents[2]?.class || "--"}</p>
+            <div className="text-2xl font-black text-white tracking-widest">{topStudents[2]?.xp?.toLocaleString() || 0}<span className="text-xs text-zinc-500 ml-1">XP</span></div>
          </div>
       </div>
 
@@ -85,9 +106,9 @@ export default function SchoolLeaderboardPage() {
                                  <span className="text-[10px] font-black text-zinc-500 tracking-widest">{s.class}</span>
                               </div>
                            </TableCell>
-                           <TableCell className="font-black text-emerald-400">{s.winRate}</TableCell>
+                           <TableCell className="font-black text-emerald-400">{s.accuracy || "0%"}</TableCell>
                            <TableCell className="text-right px-8 font-black text-white text-lg tracking-tight">
-                              {s.xp.toLocaleString()} <span className="text-[10px] text-zinc-600 ml-0.5">XP</span>
+                              {s.xp?.toLocaleString() || 0} <span className="text-[10px] text-zinc-600 ml-0.5">XP</span>
                            </TableCell>
                         </TableRow>
                      ))}

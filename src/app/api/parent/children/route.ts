@@ -1,74 +1,85 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth"; // Assuming auth helper exists
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+import { jwtVerify } from 'jose';
+
+const prisma = new PrismaClient();
+const secretKey = new TextEncoder().encode(
+  process.env.SESSION_SECRET || 'super_secret_fallback_key_for_dev_only'
+);
+
+// Unified token decryptor
+async function auth(req: Request) {
+  const authHeader = req.headers.get('authorization');
+  if (!authHeader?.startsWith('Bearer ')) return null;
+  
+  const token = authHeader.split(' ')[1];
+  try {
+    const { payload } = await jwtVerify(token, secretKey);
+    return payload;
+  } catch (e) {
+    return null;
+  }
+}
 
 export async function GET(req: Request) {
-  try {
-    const session = await getSession();
-    if (!session || session.role !== "PARENT") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const user = await auth(req);
+  if (!user || user.role !== 'PARENT') {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
+  try {
     const children = await prisma.user.findMany({
-      where: { parentId: session.userId },
+      where: { parentId: user.userId as string },
       select: {
         id: true,
         name: true,
-        xp: true,
-        coins: true,
-        level: true,
-        streak: true,
         class: true,
         school: true,
-        attempts: {
-          orderBy: { createdAt: "desc" },
-          take: 5,
-          select: {
-            score: true,
-            accuracy: true,
-            createdAt: true,
-            quiz: { select: { title: true, subject: true } }
-          }
-        }
+        xp: true,
+        streak: true,
+        coins: true,
       }
     });
 
-    return NextResponse.json(children);
-  } catch (error) {
-    console.error("Parent children fetch error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    const parsed = children.map(c => ({
+      ...c,
+      name: c.name || "Student",
+      class: c.class || "10",
+      school: c.school || "BOB Academy"
+    }));
+
+    return NextResponse.json(parsed);
+  } catch (e) {
+    return NextResponse.json({ error: "DB Error" }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
-  try {
-    const session = await getSession();
-    if (!session || session.role !== "PARENT") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const user = await auth(req);
+  if (!user || user.role !== 'PARENT') {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-    const { childPhone } = await req.json();
+  try {
+    const body = await req.json();
+    const { childPhone } = body;
 
     const child = await prisma.user.findUnique({
       where: { phone: childPhone }
     });
 
     if (!child) {
-      return NextResponse.json({ error: "Child not found" }, { status: 404 });
+      return NextResponse.json({ error: "No student registered with this number." }, { status: 404 });
     }
 
-    if (child.parentId) {
-      return NextResponse.json({ error: "Child already linked to a parent" }, { status: 400 });
-    }
-
+    // Bind parentID foreign key
     await prisma.user.update({
       where: { id: child.id },
-      data: { parentId: session.userId }
+      data: { parentId: user.userId as string }
     });
 
-    return NextResponse.json({ message: "Child linked successfully" });
-  } catch (error) {
-    console.error("Parent link child error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ success: true, message: "Child linked securely!" });
+  } catch (e) {
+    return NextResponse.json({ error: "Failed to link child due to processing overlap." }, { status: 500 });
   }
 }
