@@ -53,7 +53,7 @@ export default function OnboardingPage() {
       <Card className="w-full max-w-2xl bg-zinc-900 border-zinc-800 shadow-2xl">
         <CardContent className="p-8">
           <div className="flex flex-col flex-start mb-8">
-            <h1 className="text-3xl font-black text-white tracking-tight">Create your Identity</h1>
+            <h1 className="text-2xl font-extrabold text-white tracking-tight">Create your Identity</h1>
             <p className="text-zinc-400 mt-2">Finish setting up your profile to join battles.</p>
           </div>
 
@@ -95,7 +95,7 @@ export default function OnboardingPage() {
             </div>
 
             <div className="pt-4">
-              <Button type="submit" disabled={loading} className="w-full h-14 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl text-lg">
+              <Button type="submit" disabled={loading} className="w-full h-12 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl text-lg">
                 {loading ? "Saving..." : "Start Battling"}
               </Button>
             </div>

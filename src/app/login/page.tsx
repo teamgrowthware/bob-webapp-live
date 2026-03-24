@@ -69,7 +69,7 @@ export default function LoginPage() {
             <div className="bg-gradient-to-tr from-violet-600 to-fuchsia-500 p-3 rounded-2xl mb-4 shadow-lg shadow-violet-500/20">
               <Brain className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Enter the Arena</h1>
+            <h1 className="text-xl font-bold text-white tracking-tight">Enter the Arena</h1>
             <p className="text-zinc-400 text-sm mt-2 text-center">
               {step === "PHONE" ? "Enter your phone number to get an OTP" : "Enter the verification code sent to your phone"}
             </p>
@@ -85,14 +85,14 @@ export default function LoginPage() {
                   placeholder="10-digit Phone Number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="bg-zinc-950 border-zinc-800 h-14 text-center text-lg text-white placeholder:text-zinc-600 rounded-xl focus-visible:ring-violet-500"
+                  className="bg-zinc-950 border-zinc-800 h-12 text-center text-lg text-white placeholder:text-zinc-600 rounded-xl focus-visible:ring-violet-500"
                   required
                   maxLength={10}
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full h-14 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl text-lg group"
+                className="w-full h-12 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl text-lg group"
                 disabled={loading || phone.length < 10}
               >
                 {loading ? "Sending..." : "Send OTP"}
@@ -107,14 +107,15 @@ export default function LoginPage() {
                   placeholder="Enter OTP (123456)"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  className="bg-zinc-950 border-zinc-800 h-14 text-center text-2xl tracking-widest text-white placeholder:text-zinc-600 rounded-xl focus-visible:ring-violet-500"
+                                     className="bg-zinc-950 border-zinc-800 h-12 text-center text-xl tracking-widest text-white placeholder:text-zinc-600 rounded-xl focus-visible:ring-violet-500"
+
                   required
                   maxLength={6}
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full h-14 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl text-lg"
+                className="w-full h-12 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl text-lg"
                 disabled={loading || otp.length < 6}
               >
                 {loading ? "Verifying..." : "Verify & Play"}
