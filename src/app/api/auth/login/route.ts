@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { SignJWT } from 'jose';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
 const secretKey = new TextEncoder().encode(
   process.env.SESSION_SECRET || 'super_secret_fallback_key_for_dev_only'
 );
