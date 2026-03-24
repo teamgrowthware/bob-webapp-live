@@ -52,10 +52,10 @@ export default async function QuizSessionPage({ params }: { params: Promise<{ id
   if (alreadyAttempted) redirect("/dashboard?error=already_attempted");
 
   // Strip correct answers before sending to client
-  const safeQuestions = quiz.questions.map(q => ({
+  const safeQuestions = quiz.questions.map((q: any) => ({
     id: q.id,
     text: q.text,
-    options: JSON.parse(q.options),
+    options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options,
     timeLimit: q.timeLimit
   }));
 
