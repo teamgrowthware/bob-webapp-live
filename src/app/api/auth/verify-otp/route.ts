@@ -39,8 +39,11 @@ export async function POST(request: Request) {
       isNewUser,
       needsOnboarding: !user.name || !user.class || !user.school
     });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Authentication failed" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Auth Error:", error);
+    return NextResponse.json({ 
+      error: "Authentication failed", 
+      details: error.message || "Unknown error"
+    }, { status: 500 });
   }
 }

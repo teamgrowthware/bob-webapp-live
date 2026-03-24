@@ -45,7 +45,9 @@ export default function LoginPage() {
         body: JSON.stringify({ phone, otp }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Verification failed");
+      if (!res.ok) {
+        throw new Error(data.details ? `${data.error}: ${data.details}` : (data.error || "Verification failed"));
+      }
 
       if (data.needsOnboarding) {
         router.push("/onboarding");
