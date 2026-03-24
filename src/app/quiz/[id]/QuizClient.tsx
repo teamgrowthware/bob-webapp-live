@@ -99,8 +99,8 @@ export default function QuizClient({ quizId, title, questions }: { quizId: strin
             />
             <Zap className="absolute inset-0 m-auto w-12 h-12 text-violet-500 animate-pulse" />
         </div>
-        <h2 className="text-3xl font-black text-white italic mt-10 uppercase tracking-tighter">Uploading Results...</h2>
-        <p className="text-zinc-500 font-bold mt-2 uppercase tracking-widest text-[10px]">Your performance is being analyzed</p>
+        <h2 className="text-2xl font-bold text-white italic mt-10 uppercase tracking-tighter">Uploading Results...</h2>
+        <p className="text-zinc-500 font-bold mt-2 uppercase tracking-widest text-[9px]">Your performance is being analyzed</p>
       </div>
     );
   }
@@ -122,17 +122,17 @@ export default function QuizClient({ quizId, title, questions }: { quizId: strin
             <div className="p-2 bg-zinc-900 rounded-xl border border-white/5">
                 <Flame className="text-white w-5 h-5" />
             </div>
-            <h1 className="font-black text-white uppercase italic tracking-tighter text-lg truncate max-w-[150px] sm:max-w-xs">{title}</h1>
+            <h1 className="font-bold text-white uppercase italic tracking-tighter text-base truncate max-w-[150px] sm:max-w-xs">{title}</h1>
         </div>
         
         <div className="flex items-center gap-8">
           <div className="hidden sm:flex flex-col items-end">
-             <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none mb-1">Mission Progress</span>
-             <span className="text-white font-black italic">{currentIndex + 1} / {questions.length}</span>
+             <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest leading-none mb-1">Mission Progress</span>
+             <span className="text-white font-bold italic text-sm">{currentIndex + 1} / {questions.length}</span>
           </div>
-          <div className={`flex items-center gap-3 px-6 py-2 rounded-2xl border transition-all ${timeLeft <= 5 ? "bg-red-500 border-red-400 text-white shadow-[0_0_30px_rgba(239,68,68,0.4)] animate-pulse" : "bg-white/5 border-white/10 text-white"}`}>
-            <Timer className={`w-5 h-5 ${timeLeft <= 5 ? "animate-spin-slow" : ""}`} />
-            <span className="font-black text-2xl italic tracking-tighter tabular-nums">00:{timeLeft.toString().padStart(2, '0')}</span>
+          <div className={`flex items-center gap-3 px-5 py-1.5 rounded-2xl border transition-all ${timeLeft <= 5 ? "bg-red-500 border-red-400 text-white shadow-[0_0_30px_rgba(239,68,68,0.4)] animate-pulse" : "bg-white/5 border-white/10 text-white"}`}>
+            <Timer className={`w-4 h-4 ${timeLeft <= 5 ? "animate-spin-slow" : ""}`} />
+            <span className="font-bold text-xl italic tracking-tighter tabular-nums">00:{timeLeft.toString().padStart(2, '0')}</span>
           </div>
         </div>
       </header>
@@ -161,8 +161,8 @@ export default function QuizClient({ quizId, title, questions }: { quizId: strin
             <GlowCard glowColor="violet" animate={false} className="border-0 shadow-none ring-1 ring-white/10">
               <CardContent className="p-10 sm:p-16">
                 <div className="flex items-start gap-4 mb-10">
-                    <div className="bg-violet-600/20 text-violet-400 p-2 rounded-lg font-black text-xs h-fit">Q{currentIndex + 1}</div>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-none uppercase italic tracking-tight">
+                    <div className="bg-violet-600/20 text-violet-400 p-2 rounded-lg font-bold text-[10px] h-fit uppercase">Q{currentIndex + 1}</div>
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight uppercase italic tracking-tight">
                     {currentQ.text}
                     </h2>
                 </div>
@@ -182,12 +182,12 @@ export default function QuizClient({ quizId, title, questions }: { quizId: strin
                       }`}
                     >
                       <div className="relative z-10 flex items-center gap-6">
-                        <div className={`w-10 h-10 rounded-full border-4 flex items-center justify-center font-black text-lg italic transition-colors ${
+                        <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-base italic transition-colors ${
                             selectedIdx === idx ? "bg-white text-violet-600 border-white" : "border-white/10 text-zinc-500 group-hover:border-violet-500 group-hover:text-violet-400"
                         }`}>
                             {String.fromCharCode(65 + idx)}
                         </div>
-                        <span className={`text-xl lg:text-2xl font-black uppercase italic tracking-tight ${
+                        <span className={`text-lg lg:text-xl font-bold uppercase italic tracking-tight ${
                             selectedIdx === idx ? "text-white" : "text-zinc-300 group-hover:text-white"
                         }`}>{opt}</span>
                       </div>

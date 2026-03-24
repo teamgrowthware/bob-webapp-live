@@ -29,7 +29,7 @@ export default function LandingPage() {
       <nav className="border-b border-white/5 bg-[#16161e]/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group">
-             <span className="font-bold italic text-xl lg:text-2xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
+             <span className="font-bold italic text-lg lg:text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
                 BATTLE OF BRAINS (BOB)
              </span>
           </div>
@@ -64,17 +64,17 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1, duration: 0.5 }}
-            className="text-6xl md:text-8xl lg:text-9xl font-extrabold italic uppercase tracking-tighter leading-none text-white"
+            className="text-5xl md:text-6xl lg:text-7xl font-extrabold italic uppercase tracking-tighter leading-none text-white"
           >
             Battle of<br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 drop-shadow-[0_0_40px_rgba(139,92,246,0.3)]">Brains</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 drop-shadow-[0_0_40px_rgba(139,92,246,0.2)]">Brains</span>
           </motion.h1>
 
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="max-w-2xl mx-auto text-zinc-500 text-lg md:text-xl font-bold leading-relaxed tracking-tight uppercase"
+            className="max-w-xl mx-auto text-zinc-500 text-sm md:text-base font-semibold leading-relaxed tracking-tight uppercase"
           >
             The elite gamified arena where warriors dominate subjects, crush missions, and secure their place on the global leaderboard.
           </motion.p>
@@ -89,9 +89,9 @@ export default function LandingPage() {
                 onClick={handleStart} 
                 disabled={isPending}
                 size="lg" 
-                className="h-16 px-12 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-400 hover:to-emerald-300 text-green-950 font-bold text-xl shadow-[0_0_50px_rgba(34,197,94,0.3)] transition-all hover:scale-105 group active:scale-95 italic uppercase tracking-widest border border-green-300/50"
+                className="h-14 px-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-400 hover:to-emerald-300 text-green-950 font-bold text-lg shadow-[0_0_40px_rgba(34,197,94,0.2)] transition-all hover:scale-105 group active:scale-95 italic uppercase tracking-widest border border-green-300/50"
              >
-                ENTER ARENA NOW <ChevronRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
+                ENTER ARENA NOW <ChevronRight className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
              </Button>
           </motion.div>
         </div>
@@ -113,9 +113,9 @@ export default function LandingPage() {
                viewport={{ once: true }}
                className="text-center space-y-3"
              >
-                <div className="flex justify-center bg-white/5 w-14 h-14 rounded-2xl items-center mx-auto border border-white/10 mb-6">{stat.icon}</div>
-                <p className="text-3xl md:text-4xl font-bold italic tracking-tighter">{stat.value}</p>
-                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">{stat.label}</p>
+                <div className="flex justify-center bg-white/5 w-12 h-12 rounded-2xl items-center mx-auto border border-white/10 mb-6">{stat.icon}</div>
+                <p className="text-2xl md:text-3xl font-bold italic tracking-tighter">{stat.value}</p>
+                <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{stat.label}</p>
              </motion.div>
            ))}
         </div>
@@ -125,8 +125,8 @@ export default function LandingPage() {
       <section id="features" className="py-32 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
-             <h2 className="text-4xl md:text-5xl font-bold italic uppercase tracking-tighter mb-4">Tactical Advantages</h2>
-             <p className="text-zinc-500 font-semibold uppercase text-[10px] tracking-[0.4em]">Optimized for Student Supremacy</p>
+             <h2 className="text-3xl md:text-4xl font-bold italic uppercase tracking-tighter mb-4">Tactical Advantages</h2>
+             <p className="text-zinc-500 font-semibold uppercase text-[9px] tracking-[0.4em]">Optimized for Student Supremacy</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -161,7 +161,7 @@ export default function LandingPage() {
                 <div className={`w-20 h-20 rounded-3xl ${f.bg} border ${f.glow} flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 transition-transform`}>
                   {f.icon}
                 </div>
-                <h3 className="text-2xl font-bold italic uppercase tracking-tighter mb-4 text-white group-hover:text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 transition-all">{f.title}</h3>
+                <h3 className="text-xl font-bold italic uppercase tracking-tighter mb-4 text-white group-hover:text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 transition-all">{f.title}</h3>
                 <p className="text-zinc-400 font-medium tracking-tight leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}

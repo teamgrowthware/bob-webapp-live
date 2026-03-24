@@ -56,7 +56,7 @@ export function CoinBalance({ coins }: { coins: number }) {
     <motion.span 
       initial={{ opacity: 0, scale: 0.5 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      className="text-7xl font-black text-white italic tracking-tighter leading-none"
+      className="text-4xl font-bold text-white italic tracking-tighter leading-none"
     >
       {coins}
     </motion.span>

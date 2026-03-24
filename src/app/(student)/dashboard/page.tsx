@@ -93,10 +93,10 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
       <div className="xl:col-span-3 space-y-6">
          {/* Welcome Header */}
          <div className="flex flex-col gap-1 mb-6">
-            <h1 className="text-3xl md:text-4xl font-medium text-white flex items-center gap-2">
-               Welcome back, <span className="font-bold text-violet-400">{user.name.split(" ")[0]}!</span> <Flame className="text-orange-500 fill-orange-500 w-6 h-6 animate-pulse" />
+            <h1 className="text-xl md:text-2xl font-medium text-zinc-400 flex items-center gap-2">
+               Welcome back, <span className="font-bold text-violet-400">{user.name.split(" ")[0]}!</span> <Flame className="text-orange-500 fill-orange-500 w-5 h-5 animate-pulse" />
             </h1>
-            <p className="text-2xl font-semibold text-zinc-300">Your next grand duel awaits:</p>
+            <p className="text-lg font-bold text-white uppercase tracking-tight">Your next grand duel awaits:</p>
          </div>
 
          {/* Hero Card */}
@@ -111,13 +111,13 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
                     <Sparkles className="w-20 h-20 text-white" />
                 </div>
                 
-                <span className="text-violet-300 font-medium tracking-widest uppercase text-sm mb-3">Ready to challenge your limits?</span>
-                <h2 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter mb-8 max-w-2xl leading-tight">
+                <span className="text-violet-300 font-medium tracking-widest uppercase text-[10px] mb-3">Ready to challenge your limits?</span>
+                <h2 className="text-xl md:text-3xl font-bold text-white italic tracking-tighter mb-8 max-w-xl leading-tight uppercase">
                    Grade {user.class} Challenge: The Ultimate Duel
                 </h2>
                 
                 <Link href="/battle">
-                   <Button size="lg" className="h-16 px-12 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-400 hover:to-emerald-300 text-green-950 font-black text-xl shadow-[0_0_40px_rgba(34,197,94,0.4)] transition-all hover:scale-105 group active:scale-95 italic uppercase tracking-widest border border-green-300/50">
+                   <Button size="lg" className="h-12 px-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-400 hover:to-emerald-300 text-green-950 font-bold text-base shadow-[0_0_30px_rgba(34,197,94,0.3)] transition-all hover:scale-105 group active:scale-95 italic uppercase tracking-widest border border-green-300/50">
                       START BATTLE NOW
                    </Button>
                 </Link>
@@ -130,16 +130,16 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
             <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-500/10 blur-[100px] rounded-full group-hover:bg-cyan-500/20 transition-all duration-700" />
             
             <div className="flex-1 z-10 text-center md:text-left">
-               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[9px] font-bold uppercase tracking-[0.2em] mb-4">
                  <Target className="w-3 h-3" /> Live Mission
                </div>
-               <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-2">Daily Savage Quiz</h2>
-               <p className="text-zinc-400 text-sm font-medium">Destroy the competition. Win BOB Coins. 10 Minutes of pure focus.</p>
+               <h2 className="text-xl font-bold text-white italic tracking-tighter uppercase mb-2">Daily Savage Quiz</h2>
+               <p className="text-zinc-400 text-xs font-medium">Destroy the competition. Win BOB Coins. 10 Minutes of pure focus.</p>
             </div>
             
             <Link href="/quiz" className="z-10 w-full md:w-auto">
-               <Button className="w-full md:w-auto h-14 px-10 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-cyan-950 font-black italic uppercase tracking-widest shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:scale-105 active:scale-95 transition-all">
-                  <Play className="mr-2 w-5 h-5 fill-current" /> Ignite
+               <Button className="w-full md:w-auto h-12 px-8 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-cyan-950 font-bold italic uppercase tracking-widest shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:scale-105 active:scale-95 transition-all text-sm">
+                  <Play className="mr-2 w-4 h-4 fill-current" /> Ignite
                </Button>
             </Link>
          </div>
@@ -148,7 +148,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
          <div className="grid md:grid-cols-2 gap-6 mt-6">
             {/* Upcoming Battles */}
             <div className="space-y-4">
-               <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Upcoming Battles</h3>
+               <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Upcoming Battles</h3>
                <div className="grid gap-4">
                   {activeAssignments.length > 0 ? activeAssignments.map((assignment: any) => (
                     <Link href={`/quiz/${assignment.quizId}`} key={assignment.id}>
@@ -172,7 +172,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
 
             {/* Daily Study Tips */}
             <div className="space-y-4">
-               <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Daily Study Tips</h3>
+               <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Daily Study Tips</h3>
                <p className="text-xs text-zinc-500 -mt-3 mb-2">Curated for the chosen subject:</p>
                <div className="grid gap-4">
                   {recommendations.length > 0 ? recommendations.slice(0, 2).map((rec: any, i: number) => (
@@ -198,7 +198,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
       {/* RIGHT COLUMN: Leaderboard */}
       <div className="xl:col-span-1">
          <div className="bg-[#1d1b27] border border-[#b29f4b]/20 rounded-3xl p-6 sticky top-28 h-[calc(100vh-8rem)] flex flex-col shadow-[0_0_50px_rgba(202,138,4,0.05)]">
-            <h3 className="text-[#eab308] font-bold text-sm tracking-widest uppercase mb-6 flex items-center gap-2">
+            <h3 className="text-[#eab308] font-bold text-[10px] tracking-widest uppercase mb-6 flex items-center gap-2">
                Global Top Performers
             </h3>
 

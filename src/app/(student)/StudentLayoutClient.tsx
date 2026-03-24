@@ -41,7 +41,7 @@ export default function StudentLayoutClient({ children, user }: { children: Reac
       <header className="h-16 md:h-20 bg-[#16161e] border-b border-white/5 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <span className="font-black italic text-xl lg:text-2xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
+          <span className="font-bold italic text-lg lg:text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
             BATTLE OF BRAINS (BOB)
           </span>
         </div>
@@ -54,7 +54,7 @@ export default function StudentLayoutClient({ children, user }: { children: Reac
                <Link 
                  key={item.name} 
                  href={item.href}
-                 className={`text-[11px] font-black uppercase tracking-widest transition-colors py-2 border-b-2 ${isActive ? "text-violet-400 border-violet-500" : "text-zinc-500 border-transparent hover:text-white"}`}
+                 className={`text-[10px] font-bold uppercase tracking-widest transition-colors py-2 border-b-2 ${isActive ? "text-violet-400 border-violet-500" : "text-zinc-500 border-transparent hover:text-white"}`}
                >
                  {item.name}
                </Link>
@@ -67,17 +67,17 @@ export default function StudentLayoutClient({ children, user }: { children: Reac
            {/* XP Badge */}
            <div className="flex items-center justify-center bg-blue-500/10 border border-blue-500/20 rounded-full pl-2 pr-4 py-1.5 gap-2 group">
               <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
-                 <span className="text-[10px] font-black text-black">XP</span>
+                 <span className="text-[9px] font-bold text-black">XP</span>
               </div>
-              <span className="font-bold text-sm tracking-tight">{user.xp}</span>
+              <span className="font-semibold text-xs tracking-tight">{user.xp}</span>
            </div>
 
            {/* Coins Badge */}
            <div className="flex items-center justify-center bg-amber-500/10 border border-amber-500/20 rounded-full pl-2 pr-4 py-1.5 gap-2 group">
               <div className="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center">
-                 <span className="text-[10px] font-black text-black">B</span>
+                 <span className="text-[9px] font-bold text-black">B</span>
               </div>
-              <span className="font-bold text-sm tracking-tight">{user.coins}</span>
+              <span className="font-semibold text-xs tracking-tight">{user.coins}</span>
            </div>
         </div>
       </header>
