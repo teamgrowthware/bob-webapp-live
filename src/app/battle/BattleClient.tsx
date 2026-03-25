@@ -32,7 +32,10 @@ export default function BattleClient({ currentUser }: { currentUser: { id: strin
   const [finalScores, setFinalScores] = useState({ me: 0, opp: 0 });
 
   useEffect(() => {
-    const socket = io(window.location.origin);
+    const socket = io(window.location.origin, {
+      transports: ["websocket", "polling"],
+      reconnectionAttempts: 3
+    });
     socketRef.current = socket;
 
     socket.on("match_found", (data) => {
@@ -65,6 +68,45 @@ export default function BattleClient({ currentUser }: { currentUser: { id: strin
     return () => { socket.disconnect(); };
   }, [currentUser]);
 
+  // --- BOT FALLBACK LOGIC ---
+  useEffect(() => {
+    if (battleState !== "MATCHMAKING") return;
+
+    const botTimeout = setTimeout(() => {
+      console.log("Matchmaking timed out, starting Bot Match...");
+      
+      const MOCK_BOT_QUESTIONS = [
+        { id: "bq1", text: "Which is the fastest animal on land?", options: ["Lion", "Cheetah", "Horse", "Eagle"], timeLimit: 15 },
+        { id: "bq2", text: "What is 15 x 15?", options: ["225", "255", "215", "205"], timeLimit: 15 },
+        { id: "bq3", text: "What does 'HTTP' stand for?", options: ["Hyper Text Transfer Protocol", "High Tier Text Processing", "Hyper Transfer Text Path", "Host Text Terminal Protocol"], timeLimit: 15 },
+        { id: "bq4", text: "If a train travels 120km in 2 hours, what is its speed?", options: ["50 km/h", "60 km/h", "70 km/h", "80 km/h"], timeLimit: 15 },
+        { id: "bq5", text: "Identify the odd one out.", options: ["Python", "Java", "C++", "HTML"], timeLimit: 15 }
+      ];
+
+      setQuestions(MOCK_BOT_QUESTIONS);
+      setOpponent({ userId: "bot-9000", userName: "SavageBot_9000", avatar: "avatar-3.png" });
+      setBattleState("VS_SCREEN");
+
+      setTimeout(() => {
+        setBattleState("PLAYING");
+        setTimeLeft(15);
+      }, 3000);
+    }, 5000); // 5 seconds wait
+
+    return () => clearTimeout(botTimeout);
+  }, [battleState]);
+
+  // Simulate Bot Score
+  useEffect(() => {
+    if (battleState !== "PLAYING" || !opponent?.userId.startsWith("bot")) return;
+
+    const botThinking = setInterval(() => {
+      setOppScore(prev => prev + (Math.random() > 0.6 ? Math.floor(Math.random() * 100) : 0));
+    }, 4000);
+
+    return () => clearInterval(botThinking);
+  }, [battleState, opponent]);
+
   // Handle countdown timer
   useEffect(() => {
     if (battleState !== "PLAYING") return;
@@ -82,16 +124,32 @@ export default function BattleClient({ currentUser }: { currentUser: { id: strin
   }, [timeLeft, battleState]);
 
   const handleNext = (selectedOptionIndex: number) => {
-    if (!socketRef.current || battleState !== "PLAYING") return;
+    if (battleState !== "PLAYING") return;
 
     const points = selectedOptionIndex !== -1 ? Math.floor(Math.random() * 50) + 50 : 0;
-    socketRef.current.emit("update_score", { roomId, userId: currentUser.id, points });
+    
+    // Update local score
+    setMyScore(prev => prev + points);
+
+    // Sync with server if socket is active
+    if (socketRef.current && roomId) {
+      socketRef.current.emit("update_score", { roomId, userId: currentUser.id, points });
+    }
 
     if (currentQIndex < questions.length - 1) {
+      const nextQ = questions[currentQIndex + 1];
       setCurrentQIndex(prev => prev + 1);
-      setTimeLeft(questions[currentQIndex + 1].timeLimit);
+      setTimeLeft(nextQ.timeLimit || 15);
     } else {
-      socketRef.current.emit("battle_end", { roomId });
+      // End Battle
+      if (socketRef.current && roomId) {
+        socketRef.current.emit("battle_end", { roomId });
+      } else {
+        // Local Bot Match End
+        setWinner(myScore + points >= oppScore ? currentUser.id : opponent?.userId || "bot");
+        setFinalScores({ me: myScore + points, opp: oppScore });
+        setBattleState("GAME_OVER");
+      }
     }
   };
 
