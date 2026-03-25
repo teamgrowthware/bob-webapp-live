@@ -74,7 +74,7 @@ export default async function QuizResultsPage({ params, searchParams }: { params
               </div>
           </div>
           <div>
-            <h1 className="text-5xl md:text-6xl font-black text-white italic tracking-tighter uppercase leading-none">{quiz.title}</h1>
+            <h1 className="text-5xl md:text-6xl font-black text-white italic tracking-tight uppercase leading-none">{quiz.title}</h1>
             <p className="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px] mt-4">Mission Status: Decimated</p>
           </div>
         </div>
@@ -114,12 +114,12 @@ export default async function QuizResultsPage({ params, searchParams }: { params
 
         <div className="flex flex-col sm:flex-row gap-6">
           <Link href="/dashboard" className="flex-1">
-            <Button className="w-full h-20 bg-white text-black hover:bg-zinc-200 text-xl font-black rounded-[24px] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] uppercase italic tracking-tighter">
+            <Button className="w-full h-20 bg-white text-black hover:bg-zinc-200 text-xl font-black rounded-[24px] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] uppercase italic tracking-tight">
               Return to HQ
             </Button>
           </Link>
           <Link href="/leaderboard" className="flex-1">
-             <Button variant="outline" className="w-full h-20 border-white/10 bg-white/5 text-white hover:bg-white/10 text-xl font-black rounded-[24px] uppercase italic tracking-tighter">
+             <Button variant="outline" className="w-full h-20 border-white/10 bg-white/5 text-white hover:bg-white/10 text-xl font-black rounded-[24px] uppercase italic tracking-tight">
                 Hall of Fame
              </Button>
           </Link>

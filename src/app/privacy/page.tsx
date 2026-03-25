@@ -19,7 +19,7 @@ export default function PrivacyPage() {
             <div className="bg-gradient-to-tr from-violet-600 to-fuchsia-500 p-2 rounded-xl">
               <Brain className="w-6 h-6 text-white" />
             </div>
-            <span className="font-bold text-xl tracking-tighter italic">BOB</span>
+            <span className="font-bold text-xl tracking-tight italic">BOB</span>
           </Link>
           <Link href="/login">
             <Button className="bg-white hover:bg-zinc-200 text-black font-bold px-6 rounded-full transition-all active:scale-95">
@@ -39,11 +39,11 @@ export default function PrivacyPage() {
             <ShieldCheck size={14} />
             Data Shield Active
           </div>
-          <h1 className="text-3xl md:text-5xl font-bold italic uppercase tracking-tighter mb-6 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-bold italic uppercase tracking-tight mb-6 leading-tight">
             Privacy<br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400">Tactical Policy</span>
           </h1>
-          <p className="text-zinc-500 font-bold uppercase tracking-tighter text-sm">Last Protocol Update: March 20, 2026</p>
+          <p className="text-zinc-500 font-bold uppercase tracking-tight text-sm">Last Protocol Update: March 20, 2026</p>
         </motion.div>
 
         <section className="space-y-12 text-zinc-400 font-medium leading-relaxed">

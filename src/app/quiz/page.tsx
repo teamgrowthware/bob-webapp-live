@@ -36,7 +36,7 @@ export default function DailyQuizRedirectPage() {
   return (
     <div className="min-h-screen bg-[#111116] flex flex-col items-center justify-center text-white">
        <Loader2 className="w-12 h-12 text-cyan-500 animate-spin mb-4" />
-       <h1 className="text-2xl font-black italic tracking-tighter uppercase">Initializing Daily Savage Quiz...</h1>
+       <h1 className="text-2xl font-black italic tracking-tight uppercase">Initializing Daily Savage Quiz...</h1>
        <p className="text-zinc-500 font-bold mt-2 uppercase tracking-widest text-[10px]">Prepare for glory</p>
     </div>
   );

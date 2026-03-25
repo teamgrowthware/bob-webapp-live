@@ -98,7 +98,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
       
       {/* LEFT COLUMN: Main Feed (Col 1-3) */}
       <div className="xl:col-span-3 space-y-6">
-         {/* Welcome Header */}
+          {/* Welcome Header */}
          <div className="flex flex-col gap-1 mb-6">
             <h1 className="text-xl md:text-2xl font-medium text-zinc-400 flex items-center gap-2">
                Welcome back, <span className="font-bold text-violet-400">{user.name.split(" ")[0]}!</span> <Flame className="text-orange-500 fill-orange-500 w-5 h-5 animate-pulse" />
@@ -119,7 +119,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
                 </div>
                 
                 <span className="text-violet-300 font-medium tracking-widest uppercase text-[10px] mb-3">Ready to challenge your limits?</span>
-                <h2 className="text-xl md:text-3xl font-bold text-white italic tracking-tighter mb-8 max-w-xl leading-tight uppercase">
+                <h2 className="text-xl md:text-3xl font-bold text-white italic tracking-tight mb-8 max-w-xl leading-tight uppercase">
                    Grade {user.class} Challenge: The Ultimate Duel
                 </h2>
                 
@@ -140,7 +140,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[9px] font-bold uppercase tracking-[0.2em] mb-4">
                  <Target className="w-3 h-3" /> Live Mission
                </div>
-               <h2 className="text-xl font-bold text-white italic tracking-tighter uppercase mb-2">Daily Savage Quiz</h2>
+               <h2 className="text-xl font-bold text-white italic tracking-tight uppercase mb-2">Daily Savage Quiz</h2>
                <p className="text-zinc-400 text-xs font-medium">Destroy the competition. Win BOB Coins. 10 Minutes of pure focus.</p>
             </div>
             

@@ -34,7 +34,7 @@ export default function SettingsPage() {
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-600/10 border border-violet-500/20 text-[10px] font-black text-violet-400 uppercase tracking-widest">
            <SettingsIcon size={12} /> System Configuration
         </div>
-        <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-white">
+        <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tight text-white">
            Base <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Settings</span>
         </h1>
         <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs max-w-lg">
@@ -68,7 +68,7 @@ export default function SettingsPage() {
         <div className="lg:col-span-3">
            <Card className="bg-[#16161e] border-white/5 overflow-hidden">
              <CardHeader className="border-b border-white/5 p-8">
-                <CardTitle className="text-xl font-black italic uppercase tracking-tighter text-white flex items-center gap-3">
+                <CardTitle className="text-xl font-black italic uppercase tracking-tight text-white flex items-center gap-3">
                    {tabs.find(t => t.id === activeTab)?.icon && <div className="p-2 bg-violet-600/20 rounded-lg text-violet-400">
                       {/* @ts-ignore */}
                       {(() => { const Icon = tabs.find(t => t.id === activeTab)?.icon; return Icon ? <Icon size={20} /> : null })()}
@@ -143,7 +143,7 @@ export default function SettingsPage() {
                            <div className="w-16 h-16 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/30 mb-8">
                               <Rocket size={32} className="text-white animate-bounce" />
                            </div>
-                           <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white leading-none">ELITE COMMANDER<br/>ACCESS ACTIVE</h2>
+                           <h2 className="text-4xl font-black italic uppercase tracking-tight text-white leading-none">ELITE COMMANDER<br/>ACCESS ACTIVE</h2>
                            <p className="text-white/80 font-bold uppercase tracking-[0.2em] text-[10px]">Your membership expires on Dec 2026. Stay focused.</p>
                            <div className="pt-6">
                               <Button className="bg-white text-violet-600 hover:bg-white/90 font-black uppercase tracking-widest px-10 h-14 rounded-full transition-all active:scale-95 shadow-2xl">

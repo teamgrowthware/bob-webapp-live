@@ -184,7 +184,7 @@ export default function BattleClient({ currentUser }: { currentUser: { id: strin
             <div className="w-20 h-20 bg-violet-600/20 rounded-[32px] flex items-center justify-center mx-auto border border-violet-500/30">
               <Swords className="w-10 h-10 text-violet-400" />
             </div>
-            <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase">Battle Arena</h1>
+            <h1 className="text-4xl font-black text-white italic tracking-tight uppercase">Battle Arena</h1>
             <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Choose your deployment</p>
           </div>
 
@@ -293,7 +293,7 @@ export default function BattleClient({ currentUser }: { currentUser: { id: strin
           {isWinner ? <Swords className="w-16 h-16" /> : isTie ? <UserIcon className="w-16 h-16" /> : <XCircle className="w-16 h-16" />}
         </div>
         
-        <h1 className="text-5xl font-black mb-4 text-white uppercase italic tracking-tighter relative z-10">
+        <h1 className="text-5xl font-black mb-4 text-white uppercase italic tracking-tight relative z-10">
           {isWinner ? "Victory Royale" : isTie ? "Deadlock" : "Humiliated"}
         </h1>
 

@@ -41,7 +41,7 @@ export default function StudentLayoutClient({ children, user }: { children: Reac
       <header className="h-16 md:h-20 bg-[#16161e] border-b border-white/5 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <span className="font-bold italic text-lg lg:text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
+          <span className="font-bold italic text-lg lg:text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
             BATTLE OF BRAINS (BOB)
           </span>
         </div>

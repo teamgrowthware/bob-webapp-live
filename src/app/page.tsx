@@ -29,7 +29,7 @@ export default function LandingPage() {
       <nav className="border-b border-white/5 bg-[#16161e]/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group">
-             <span className="font-bold italic text-lg lg:text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
+             <span className="font-bold italic text-lg lg:text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
                 BATTLE OF BRAINS (BOB)
              </span>
           </div>
@@ -64,7 +64,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1, duration: 0.5 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-extrabold italic uppercase tracking-tighter leading-none text-white"
+            className="text-5xl md:text-6xl lg:text-7xl font-extrabold italic uppercase tracking-tight leading-none text-white"
           >
             Battle of<br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 drop-shadow-[0_0_40px_rgba(139,92,246,0.2)]">Brains</span>
@@ -114,7 +114,7 @@ export default function LandingPage() {
                className="text-center space-y-3"
              >
                 <div className="flex justify-center bg-white/5 w-12 h-12 rounded-2xl items-center mx-auto border border-white/10 mb-6">{stat.icon}</div>
-                <p className="text-2xl md:text-3xl font-bold italic tracking-tighter">{stat.value}</p>
+                <p className="text-2xl md:text-3xl font-bold italic tracking-tight">{stat.value}</p>
                 <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">{stat.label}</p>
              </motion.div>
            ))}
@@ -161,7 +161,7 @@ export default function LandingPage() {
                 <div className={`w-20 h-20 rounded-3xl ${f.bg} border ${f.glow} flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 transition-transform`}>
                   {f.icon}
                 </div>
-                <h3 className="text-xl font-bold italic uppercase tracking-tighter mb-4 text-white group-hover:text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 transition-all">{f.title}</h3>
+                <h3 className="text-xl font-bold italic uppercase tracking-tight mb-4 text-white group-hover:text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500 transition-all">{f.title}</h3>
                 <p className="text-zinc-400 font-medium tracking-tight leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
@@ -174,7 +174,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 mb-20">
           <div className="md:col-span-2 space-y-8">
             <div className="flex items-center gap-3">
-               <span className="font-black italic text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
+               <span className="font-black italic text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 uppercase">
                   BATTLE OF BRAINS
                </span>
             </div>
