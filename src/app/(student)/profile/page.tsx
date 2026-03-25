@@ -1,6 +1,7 @@
 import { getSession } from "@/lib/session";
 import { PrismaClient } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import ProfileClient from "./ProfileClient";
 
 const prisma = new PrismaClient();
@@ -29,8 +30,14 @@ export default async function ProfilePage() {
     });
   } catch (error) {
     console.error("Profile DB Error:", error);
+    
+    // DEMO PERSISTENCE - Check for local cookie update
+    const cookieStore = await cookies();
+    const demoProfile = cookieStore.get("demo_profile")?.value;
+    const parsedDemo = demoProfile ? JSON.parse(demoProfile) : null;
+
     // FALLBACK
-    user = user || {
+    user = user || parsedDemo || {
       name: "Elite Recruiter",
       email: "soldier@bob.com",
       class: "10",
@@ -41,6 +48,10 @@ export default async function ProfilePage() {
       coins: 450,
       avatar: null
     };
+    
+    // Ensure name is always string if it comes from cookie
+    if (parsedDemo && parsedDemo.name) user.name = parsedDemo.name;
+
     attempts = 5;
     redemptions = 2;
   }

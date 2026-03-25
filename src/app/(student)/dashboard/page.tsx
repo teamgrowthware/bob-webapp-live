@@ -66,10 +66,17 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
 
   } catch (dbError) {
     console.error("Dashboard Server-Side DB Error, switching to Fail-Safe:", dbError);
+    
+    // DEMO PERSISTENCE - Check for local cookie update
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    const demoProfile = cookieStore.get("demo_profile")?.value;
+    const parsedDemo = demoProfile ? JSON.parse(demoProfile) : null;
+
     // FAIL-SAFE MOCK DATA
     user = {
-      name: "Elite Warrior",
-      class: "10",
+      name: parsedDemo?.name || "Elite Warrior",
+      class: parsedDemo?.class || "10",
       xp: 1250,
       level: 12,
       coins: 450,
@@ -77,7 +84,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ err
     topUsers = [
       { id: "1", name: "Alpha", xp: 5000, coins: 1000, level: 20 },
       { id: "2", name: "Beta", xp: 4500, coins: 800, level: 18 },
-      { id: "3", name: "You (Mock)", xp: 1250, coins: 450, level: 12 },
+      { id: "3", name: `${user.name} (You)`, xp: 1250, coins: 450, level: 12 },
     ];
     recommendations = [
       { chapterTitle: "Quantum Mechanics", content: "Focus on wave-particle duality for today's battle." },

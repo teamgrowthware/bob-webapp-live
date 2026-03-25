@@ -27,7 +27,16 @@ export async function POST(request: Request) {
       console.warn("DB Update failed on onboarding, but allowing success for demo:", dbError);
     }
 
-    return NextResponse.json({ success: true });
+    const response = NextResponse.json({ success: true });
+    
+    // Always set/update demo cookie to ensure persistence in Demo Mode
+    response.cookies.set("demo_profile", JSON.stringify(data), { 
+      path: "/", 
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      httpOnly: false // Allow client-side access if needed
+    });
+
+    return response;
   } catch (error) {
     console.error("Onboarding error:", error);
     return NextResponse.json({ error: "Failed to update profile" }, { status: 500 });

@@ -17,11 +17,19 @@ export default async function LeaderboardPage() {
     });
   } catch (error) {
     console.error("Leaderboard DB Error:", error);
+
+    // DEMO PERSISTENCE - Check for local cookie update
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    const demoProfile = cookieStore.get("demo_profile")?.value;
+    const parsedDemo = demoProfile ? JSON.parse(demoProfile) : null;
+    const userName = parsedDemo?.name || "Elite Warrior";
+
     // FAIL-SAFE MOCK DATA
     topUsers = [
       { id: "m1", name: "Savage Warrior", xp: 15000, level: 25, school: "Elite Academy", city: "Mumbai", isFeatured: true },
       { id: "m2", name: "Cyber Ninja", xp: 12500, level: 22, school: "Tech High", city: "Delhi", isFeatured: false },
-      { id: "m3", name: "Brain Destroyer", xp: 11000, level: 20, school: "Global School", city: "Bangalore", isFeatured: false },
+      { id: "m3", name: `${userName} (You)`, xp: 11000, level: 20, school: "Global School", city: "Bangalore", isFeatured: false },
       { id: "m4", name: "Math Wizard", xp: 9500, level: 18, school: "Science Inst", city: "Pune", isFeatured: false },
       { id: "m5", name: "Quiz Lord", xp: 8000, level: 15, school: "City Public", city: "Mumbai", isFeatured: false },
     ];
