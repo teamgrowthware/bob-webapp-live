@@ -15,16 +15,42 @@ export default async function QuizResultsPage({ params, searchParams }: { params
   const { score: scoreParam, accuracy: accuracyParam } = await searchParams;
   const score = parseInt(scoreParam || "0");
   const accuracy = parseInt(accuracyParam || "0");
-  
-  const quiz = await prisma.quiz.findUnique({
-    where: { id: quizId }
-  });
+
+  let quiz: any = null;
+  let user: any = null;
+
+  try {
+    if (quizId === "daily-mock") {
+      quiz = {
+        id: "daily-mock",
+        title: "Savage Daily Drop (Demo Mode)",
+        subject: "General Knowledge"
+      };
+    } else {
+      quiz = await prisma.quiz.findUnique({
+        where: { id: quizId }
+      });
+    }
+
+    const session = await getSession();
+    if (session?.userId) {
+      user = await prisma.user.findUnique({
+        where: { id: session.userId }
+      });
+    }
+  } catch (error) {
+    console.error("Quiz Results DB Error:", error);
+    // Fallback if DB is down
+    if (!quiz && quizId === "daily-mock") {
+      quiz = {
+        id: "daily-mock",
+        title: "Savage Daily Drop (Demo Mode)",
+        subject: "General Knowledge"
+      };
+    }
+  }
 
   if (!quiz) redirect("/dashboard");
-
-  const user = await prisma.user.findUnique({
-    where: { id: (await getSession())?.userId }
-  });
 
   return (
     <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 sm:p-12 relative overflow-hidden">
