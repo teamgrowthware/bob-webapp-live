@@ -125,7 +125,7 @@ export default function LandingPage() {
       <section id="features" className="py-32 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
-             <h2 className="text-3xl md:text-4xl font-bold italic uppercase tracking-tighter mb-4">Tactical Advantages</h2>
+             <h2 className="text-3xl md:text-4xl font-bold italic uppercase tracking-tight mb-4">Technical Advantages</h2>
              <p className="text-zinc-500 font-semibold uppercase text-[9px] tracking-[0.4em]">Optimized for Student Supremacy</p>
           </div>
 
